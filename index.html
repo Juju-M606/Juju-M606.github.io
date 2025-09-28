@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plateforme de Gestion de Stage</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      color: #d5dbe0;
+    }
+
+    header {
+      background-color: #ac6f28;
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .logo {
+        font: size 24px; 
+      width: 60px;
+      margin-right: 15px;
+
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.8em;
+    }
+     /* Bouton menu toggle */
+    .menu-toggle {
+      font-size: 26px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: rgb(196, 193, 193);
+      display: none; 
+    }
+
+    nav {
+      background-color: black;
+      padding-top: 10px;
+      display: flex;
+      gap: 25px;
+    }
+
+    nav ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav li {
+      margin: 0;
+    }
+
+    nav a {
+      display: block;
+      color: white;
+      padding: 15px 20px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #286aac;
+    }
+    section {
+      padding: 20px;
+      text-align: center;
+      background-color: #ac6f28;
+      
+    }
+
+    .btn {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: rgba(26, 24, 24, 0.63);
+      color: rgb(240, 229, 229);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #edf1f1;
+    }
+
+    footer {
+      background: #181b1d;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      margin-top: 40px;
+    }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- En-tête -->
+  <header>
+    <div>
+    <img src="/Front_end/Images/logo ists2.jpg" alt="logo" class="logo" />
+     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+    </button>
+    </div>
+    <h1>Plateforme de Gestion de Stage</h1>
+  </header>
+  <nav>
+    <ul>
+     <li><a href="etudiant.html" onclick="navigate('accueil')">etudiant</a></li>
+      <li><a href="entreprise.html" onclick="navigate('etudiant')"> entreprise</a></li>
+      <li><a href="encandreur.html" onclick="navigate('entreprise')"> encadreur</a></li>
+      <li><a href="offrestage.html" onclick="navigate('offres')">Offres </a></li>
+      <li><a href="contact.html" onclick="navigate('contact')">Contact</a></li>
+      <li><a href="candidature.html" onclick="navigate('candidature')">candidature</a></li>
+      <li><a href="rapport.html" onclick="navigate('entreprise')"> rapport</a></li>
+      <li><a href="admin.html" onclick="navigate('entreprise')"> admin</a></li>
+      <li><a href="stage.html" onclick="navigate('stage')"> stage</a></li>
+    </ul>
+  </nav>
+
+  <!-- Section de contenu dynamique -->
+  <section id="content">
+    <h2>Bienvenue sur la Plateforme de Gestion de Stage</h2>
+    <p>Gérez efficacement les stages étudiants et les offres d'entreprises.</p>
+    <button class="btn" onclick="navigate('etudiant')">Accès Étudiant</button>
+    <button class="btn" onclick="navigate('entreprise')">Accès Entreprise</button>
+     <a href="Ajouter_stage.html" class="btn">Ajouter_stage</a>
+  </section>
+  </header>
+  <main>
+    <section class="dashboard">
+        <h2>Bienvenue</h2>
+        <p>utiliser le menu pour gerer les donnees de stagiaires </p>
+        <div class="grid">
+            <div class="card">
+            <h3>etudiant</h3>
+            <p>Ajouter,Modifier ou suprimer les fichier des etudiant</p>
+            <a href="#" class="btn">voir  etudiants</a>
+        </div>
+        <div class="card"> 
+            <h3>Stage</h3>
+            <p>gerer les cours de stage en cours au a venir</p>
+            <a href="#" class="btn">voir stage</a>
+            </div> 
+             <div class="card"> 
+            <h4>encadreur</h4>
+            <p>Listes et acfectation des encadreurs aux stages</p>
+            <a href="#" class="btn">voir encadreur</a>
+            </div>
+            <div class="card"> 
+            <h5>entreprise</h5>
+            <p>Listes et acfectation des entreprise aux stages</p>
+            <a href="#" class="btn">voir entreprise</a>
+            </div>
+        
+        
+
+    </section>
+  </main>
+
+
+
+  <!-- Pied de page -->
+  <footer>
+    &copy; 2025 Plateforme de Gestion de Stage - Tous droits réservés
+  </footer>
+
+  <!-- Script JavaScript -->
+  <script>
+    function navigate(page) {
+      const content = document.getElementById('content');
+
+      if (page === 'accueil') {
+        content.innerHTML = `
+          <h2>Bienvenue sur la Plateforme de Gestion de Stage</h2>
+          <p>Gérez efficacement les stages étudiants et les offres d'entreprises.</p>
+          <button class="btn" onclick="navigate('etudiant')">Accès Étudiant</button>
+          <button class="btn" onclick="navigate('entreprise')">Accès Entreprise</button>
+        `;
+      } else if (page === 'etudiant') {
+        content.innerHTML = `
+          <h2>etudiant</h2>
+          <p>Connectez-vous pour consulter ou postuler aux offres de stage.</p>
+          <button class="btn" onclick="alert('Redirection vers la connexion étudiant')">Se connecter</button>
+        `;
+      } else if (page === 'entreprise') {
+        content.innerHTML = `
+          <h2> entreprise</h2>
+          <p>Publiez vos offres de stage et gérez les candidatures reçues.</p>
+          <button class="btn" onclick="alert('Redirection vers la connexion entreprise')">Se connecter</button>
+        `;
+      } else if (page === 'offres') {
+        content.innerHTML = `
+          <h2>Stage Disponibles</h2>
+          <ul style="text-align: left; max-width: 500px; margin: auto;">
+            <li><strong>Développement Web :</strong> 3 mois - Kinshasa</li>
+            <li><strong>Réseau & Sécurité :</strong> 2 mois - Lubumbashi</li>
+            <li><strong>Maintenance Informatique :</strong> 1 mois - Goma</li>
+          </ul>
+        `;
+      } else if (page === 'contact') {
+        content.innerHTML = `
+          <h2>Contact</h2>
+          <p>📧 Email : contact@plateformestage.com</p>
+          <p>📞 Téléphone : +243 000 000 000</p>
+        `;
+      }
+    }
+  </script>
+
+</body>
+</html>

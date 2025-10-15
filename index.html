@@ -1,312 +1,327 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page d'accueil</title>
-    <link rel="stylesheet" href="./Front_end/Styles/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./Front_end/Styles/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La représentation Nationale des Étudiants - RDC</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+    body{background:#f8fdfb;color:#03371e;scroll-behavior:smooth;}
+
+    /* --- Barre de navigation --- */
+    .navbar{background:#065c3d;color:#fff;padding:15px 0;position:sticky;top:0;z-index:100;}
+    .navbar .container{display:flex;align-items:center;justify-content:space-between;width:90%;margin:auto;flex-wrap:wrap;}
+    .logo{font-size:22px;font-weight:bold;}
+    .nav-links{list-style:none;display:flex;flex-wrap:wrap;gap:15px;}
+    .nav-links a{color:#fff;text-decoration:none;padding:8px 10px;transition:0.3s;}
+    .nav-links a:hover{background:#0b8c5a;border-radius:5px;}
+    .btn{background:#0b8c5a;color:#fff;padding:8px 15px;border:none;border-radius:5px;text-decoration:none;}
+    .btn:hover{background:#076f47;}
+
+    /* --- Menu mobile --- */
+    .menu-toggle{display:none;font-size:24px;cursor:pointer;}
+    @media(max-width:768px){
+      .nav-links{display:none;flex-direction:column;width:100%;background:#065c3d;padding:10px 0;}
+      .nav-links.show{display:flex;}
+      .menu-toggle{display:block;color:white;}
+    }
+
+    /* --- Section d'accueil --- */
+    .hero{
+      background:url('images/hero.png') center/cover no-repeat;color:#fff;text-align:center;padding:100px 20px;position:relative;}
+    .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.5);}
+    .hero-content{position:relative;z-index:2;}
+    .hero h2{font-size:32px;margin-bottom:10px;}
+    .hero p{margin-bottom:20px;font-size:18px;}
+    @media(max-width:600px){.hero h2{font-size:24px;}}
+
+    /* --- Sections --- */
+    .section{width:90%;margin:auto;padding:60px 0;text-align:center;opacity:0;transform:translateY(30px);transition:1s;}
+    .section.show{opacity:1;transform:translateY(0);}
+    .section h2{margin-bottom:25px;color:#065c3d;text-transform:uppercase;font-size:22px;}
+
+    .grid-2,.grid-3,.grid-4{display:grid;gap:20px;}
+    .grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+    .grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+    .grid-4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));}
+    
+  .grid-4 .card {
+  border: 2px solid #065c3d;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+}
+
+.grid-4 .card img {
+  border-radius: 8px;
+  width: 100%;
+  display: block;
+  margin-bottom: 10px;
+}
+.grid-4 .card p {
+  margin: 0;
+  font-size: 14px;
+  color: #03371e;
+  text-align: center;
+}
+
+    /* --- Cartes et images --- */
+    .card{background:#fff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);padding:15px;transition:0.3s;}
+    .card:hover{transform:translateY(-5px);}
+    .card img, .card video{width:100%;border-radius:8px;margin-bottom:10px;}
+    .member img{width:250px;height:250px;border-radius:50%;object-fit:cover;margin-bottom:10px;}
+
+    /* --- Événements --- */
+    .events{list-style:none;text-align:left;max-width:500px;margin:auto;}
+    .events li{background:#fff;padding:10px;border-left:5px solid #0b8c5a;margin-bottom:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    .events span{float:right;color:#065c3d;font-weight:bold;}
+
+    /* --- Galerie --- */
+    .grid-4 img{width:100%;border-radius:8px;transition:0.3s;}
+    .grid-4 img:hover{transform:scale(1.05);}
+
+    /* --- Carousel vidéos --- */
+    .carousel{position:relative;max-width:300px;margin:10px auto;}
+    .carousel video{display:none;width:600px;border-radius:8px;height:600px;}
+    .carousel video.active{display:block;}
+
+    /* --- Formulaire --- */
+    form{max-width:400px;margin:auto;display:flex;flex-direction:column;gap:10px;}
+    input,textarea{padding:10px;border:1px solid #ccc;border-radius:5px;}
+    button{background:#065c3d;color:#fff;padding:10px;border:none;border-radius:5px;cursor:pointer;}
+    button:hover{background:#0b8c5a;}
+
+    /* --- Pied de page --- */
+    footer{background:#03371e;color:#fff;text-align:center;padding:20px;margin-top:50px;}
+    .social a{color:#fff;text-decoration:none;margin:0 10px;transition:0.3s;}
+    .social a:hover{color:#00ff99;}
+  </style>
 </head>
 <body>
-    <header class="d-flex shadow-lg p-2">
-        <h6 class="mt-2"><span>Sig</span> App</h6>
-        <nav>
-            <ul class="d-flex justify-content-around">
-                <li class="nav-item"><a href="#" class="nav-link text-white">Accueil</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white">Fonctionnement</a></li>
-                <li class="nav-item"><a href="#sig" class="nav-link text-white">Signalement</a></li>
-                <li class="nav-item"><a href="#faq" class="nav-link text-white">FAQ</a></li>
-                <li class="nav-item"><a href="./front_end/Pages/About.html" class="nav-link text-white">A propos</a></li>
-            </ul>
-        </nav>
-    </header>
-    <div class="bloc p-5 mb-5">
-        <div class="container">
-            <div class="row">
-                <div class="col text-white mt-4">
-                    <h2 class="bienvenue-anim">Bienvenue chez Sig App</h2>
-                    <p class="bienvenue-anim">
-                        Spécialiste de la photographie et du filmage, nous capturons vos moments précieux avec
-                        professionnalisme et créativité.<br>
-                        Découvrez nos services dédiés à l'image : séances photo, reportages, vidéos événementielles et
-                        plus
-                        encore.
-                    </p>
-                    <p><a href="#" class="btn  btn-primary text-white bt">En savoir plus
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right"
-                            viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                        </svg>
-                    </a></p>
-                </div>
-                <div class="col">
-                    <div id="carouselPhoto" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="./Front_end/Images/photographie.avif" class="d-block w-100 img-fluid rounded"
-                                    alt="Photographie 1">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./Front_end/Images/photographie.avif" class="d-block w-100 img-fluid rounded>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselPhoto" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Précédent</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselPhoto"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Suivant</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <section class="blocs shadow-lg p-5">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col">
-               <h3><span>Fonct</span>ionnalité</h3> 
-               <p>
-                loremhshshshshshshshshshshsh
-                loremhshshshshshshshshshshsh
-                loremhshshshshshshshshshshsh
-               </p>
-               <p>
-                Pour plus d'information cliquez sur : <br>
-                <a href="" class="btn btn-primary text-white bt mt-2">
-                    Voir plus
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right"
-                            viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                    </svg>
-                </a>
-               </p>
-            </div>
-            <div class="col">
-                <div class="col border mt-2 rounded p-2">
-                    <h4>Inscription</h4>
-                    <p>lslsls</p>
-                </div>
-                <div  class="col border mt-2 rounded  p-2">
-                    <h4>Connexion</h4>
-                    <p>lslsls</p>
-                </div>
-                <div  class="col border mt-2 rounded  p-2">
-                    <h4>Signaler le problème</h4>
-                    <p>lslsls</p>
-                </div>
-            </div>
-          </div>
-          <div class="row justify-content-center mt-5 mb-5">
-            <h3 class="text-center"><span>Eq</span>uipes</h3>
-            <p  class="text-center">hjsjsjsjsjsjsjsjsjsjsjsjsjsjs hjsjsjsjsjsjsjsjsjsjsjsjsjsjs</p>
-            <p  class="text-center"> hjsjsjsjsjsjsjsjsjsjsjsjsjsjs</p>
-            <div class="col col-3">
-                <img src="./Front_end/Images/photographie.avif" class="img img-fluid rounded-circle border" alt="photo">
-                                <h5 class="text-center mt-2">Judith Muhungu</h5>
-                <p class="text-center">
-                     <strong><span>Role</span></strong>
-                </p>
-                <p class="text-center">
-                    <a href="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
-                        </svg>
-                    </a>
-                    <a href="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                        </svg>
-                    </a>
-                </p>
-            </div>
-        <div class="col col-3">
-                <img src="./Front_end/Images/photographie.avif" class="img img-fluid rounded-circle border" alt="photo">
-                <h5 class="text-center mt-2">Judith Muhungu</h5>
-                <p class="text-center">
-                     <strong><span>Role</span></strong>
-                </p>
-                <p class="text-center">
-                    <a href="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
-                        </svg>
-                    </a>
-                    <a href="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                        </svg>
-                    </a>
-                </p>
-            </div>
-            <div class="col col-3">
-                <img src="./Front_end/Images/photographie.avif" class="img img-fluid rounded-circle border" alt="photo">
-                                <h5 class="text-center mt-2">Judith Muhungu</h5>
-                <p class="text-center">
-                     <strong><span>Role</span></strong>
-                </p>
-                <p class="text-center">
-                    <a href="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
-                        </svg>
-                    </a>
-                    <a href="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                        </svg>
-                    </a>
-                </p>
-            </div>
-          </div>
-        </div>
-         <div class="container mt-5 mb-5">
-                <div class="row justify-content-center">
-                    <div class="col col-5">
-                        <img src="./Front_end/Images/photographie.avif" class="img img-fluid rounded border" alt="photo">
-                    </div>
-                    <div class="col col-5">
-                        <h3><span>Fonct</span>ionnalité</h3> 
-                        <p>
-                            loremhshshshshshshshshshshsh
-                            loremhshshshshshshshshshshsh
-                            loremhshshshshshshshshshshsh
-                        </p>
-                        <p>
-                            Pour signaler le problème d'Electricité cliquez sur  : <br>
-                            <a href="" class="btn btn-primary text-white bt mt-2">Signaler</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-    </section>
-    <div class="galerie-img-container mt-3">
-        <img src="./Front_end/Images/photographie.avif" alt="photographie">
-        <div class="galerie-texte-bg">
-            <h2><span>Cont</span>acez-nous</h2>
-            <p>Découvrez nos dernières réalisations et projets à travers notre galerie.</p>
-            <p><a href="#" class="btn btn-primary  text-white bt">Voir la galerie
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right"
-                    viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                </svg>
-            </a></p>
-        </div>
-    </div>    
+  <header class="navbar">
     <div class="container">
-      <div class="row">
-        <div class="col">
-            <h2 class="text-start"><span>Co</span>ntactez-nous</h2>
-            <p class="text-start">Pour toute demande d'information ou de devis, n'hésitez pas à nous contacter.</p>
-            <form>
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nom</label>
-                    <input type="text" class="form-control" id="name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="message" class="form-label">Message</label>
-                    <textarea class="form-control" id="message" rows="4" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary text-white bt">Envoyer
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right"
-                        viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                    </svg>
-                </button>
-            </form>
+      <h1 class="logo">RNEC- RDC</h1>
+      <span class="menu-toggle">☰</span>
+      <ul class="nav-links">
+        <li><a href="#presentation">Présentation</a></li>
+        <li><a href="#actualites">Actualités</a></li>
+        <li><a href="#responsables">Responsables</a></li>
+        <li><a href="#activites">Activités</a></li>
+        <li><a href="#evenements">Événements</a></li>
+        <li><a href="#bourses">Bourses</a></li>
+        <li><a href="#galerie">Galerie</a></li>
+        <li><a href="#videos">Vidéos</a></li>
+        <li><a href="#contact" class="btn">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h2>La Représentation Nationale des Étudiants - RDC</h2>
+      <p>Unité • Action • Progrès</p>
+      <a href="#activites" class="btn">Découvrir nos activités</a>
+    </div>
+  </section>
+
+  <main>
+    <section id="presentation" class="section">
+      <h2>Présentation</h2>
+      <p>La RNEC-RDC Représentation des étudiants congolais, défend leurs droits et encourage leur participation <br> active à la vie universitaire et nationale.</p>
+      <ul>
+        <ol><b>Mission :</b> Représenter les étudiants</ol>
+        <ol><b>Vision :</b> Un mouvement uni et influent</ol>
+        <ol><b>Valeurs :</b> Solidarité, transparence, inclusion</ol>
+      </ul>
+    </section>
+
+    <section id="actualites" class="section">
+      <h2>Actualités</h2>
+      <div class="grid-3">
+        <div class="card">
+          <img src="images/dollars.png" alt="">
+          <h3>Campagne d'inscription</h3>
+          <p>Renforcement des délégués étudiants.</p>
         </div>
-        <div class="col">
-            <h2 class="mt-5"><span>Nos</span> Coordonnées</h2>
-            <p class="">Vous pouvez nous contacter par téléphone ou par email.</p>
-            <ul class="list-unstyled">
-                <li><strong>Téléphone :</strong> +243 821 23 45 67 89</li>
-                <li><strong>Email :</strong> contact@zapagency.com</li>
-            </ul>
+        <div class="card">
+          <img src="images/annonce.png" alt="">
+          <h3>Formation leadership</h3>
+          <p>Atelier pratique pour dirigeants.</p>
+        </div>
+        <div class="card">
+          <img src="images/bourses.png" alt="">
+          <h3>Bourse 2026</h3>
+          <p>Appel à candidatures pour étudiants méritants.</p>
         </div>
       </div>
+    </section>
+
+   <section id="responsables" class="section">
+  <h2>Responsables</h2>
+  <p>
+    L’équipe dirigeante de la RNEC-RDC est composée de jeunes leaders engagés, déterminés à représenter les étudiants à l’échelle nationale. Chaque membre apporte son expertise et sa passion pour défendre les droits des étudiants, promouvoir l’unité, et coordonner les activités et projets au bénéfice de la communauté estudiantine. Leur travail garantit transparence, solidarité et communication efficace au sein de la RNEC.
+  </p> <br> <br>
+  <div class="grid-4">
+    <div class="member">
+      <img src="Images/president.jpg" alt="Président">
+      <h4>Alex Bukasa Nkanka</h4>
+      <p>Président national des étudiants en RDC. Il coordonne les activités de la RNEC et représente les étudiants auprès des autorités universitaires et nationales.</p>
     </div>
-    <div class="container p-3">
-        <h3 class="text-center" id="faq"><span>F</span>AQ</h3>
-        <p class="text-center">Questions fréquement posés</p>
-        <div class="row justify-content-center">
-            <div class="col border rounded m-2 p-2 shadow-lg">
-                <h4>SKSK</h4>
-                <p>JSJSJSJSJSJSJSJS</p>
-            </div>
-            <div class="col border rounded m-2 p-2 shadow-lg">
-                <h4>SKSK</h4>
-                <p>JSJSJSJSJSJSJSJS</p>
-            </div>
-            <div class="col border rounded m-2 p-2 shadow-lg">
-                <h4>SKSK</h4>
-                <p>JSJSJSJSJSJSJSJS</p>
-            </div>
-        </div>
-        <div class="row justify-content-center mt-2">
-            <div class="col border rounded m-2 p-2 shadow-lg">
-                <h4>SKSK</h4>
-                <p>JSJSJSJSJSJSJSJS</p>
-            </div>
-            <div class="col border rounded m-2 p-2 shadow-lg">
-                <h4>SKSK</h4>
-                <p>JSJSJSJSJSJSJSJS</p>
-            </div>
-            <div class="col border rounded m-2 p-2 shadow-lg">
-                <h4>SKSK</h4>
-                <p>JSJSJSJSJSJSJSJS</p>
-            </div>
-        </div>
+    <div class="member">
+      <img src="Images/president.jpg" alt="Secrétaire Générale">
+      <h4>Amina Tshibangu</h4>
+      <p>Secrétaire Générale. Elle supervise l’organisation interne, la documentation et la communication administrative de la RNEC.</p>
     </div>
-    <footer class="mt-5">
-        <div class="row">
-            <div class="col m-2">
-                <h5><span>Zap</span> Agency</h5>
-                <p class="m-2">
-                    Nous sommes spécialisés dans la photographie et le filmage, offrant des services de qualité pour
-                    capturer vos moments précieux.
-                </p>
-            </div>
-            <div class="col">
-                <h5><span>A</span> propos de nous</h5>
-                <p class="mt-2">
-                    Zap Agency est une agence spécialisée dans la photographie et le filmage, dédiée à capturer vos
-                    moments précieux avec passion et professionnalisme.
-                </p>
-            </div>
-            <div class="col">
-                <h5><span>Lien</span> utiles</h5>
-                <ul class="mt-2">
-                    <li><a href="#">Politique de confidentialité</a></li>
-                    <li><a href="#">Conditions d'utilisation</a></li>
-                    <li><a href="#">Aide et support</a></li>
-                </ul>
-            </div>
-            <div class="col">
-                <h5><span>Co</span>ntact</h5>
-                <p>Email: contact@zapagency.com</p>
-                <h5>Reseaux sociaux</h5>
-                <ul class="mt-2">
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">Twitter</a></li>
-                </ul>
-            </div>
+    <div class="member">
+      <img src="images/AADAM.png" alt="Trésorier">
+      <h4>Patrick Ilunga</h4>
+      <p>Trésorier. Il gère les finances, les budgets et les bourses au sein de l’organisation, assurant transparence et bonne gestion des ressources.</p>
+    </div>
+    <div class="member">
+      <img src="Images/communication.jpg" alt="Responsable Communication">
+      <h4>Grace Luyeye</h4>
+      <p>Responsable Communication. Elle coordonne la communication interne et externe, les réseaux sociaux, et la promotion des activités et événements de la RNEC.</p>
+    </div>
+  </div>
+</section>
+    <!-- SECTION ACTIVITÉS AVEC 4 VIDÉOS -->
+    <section id="activites" class="section">
+      <h2>Activités & Projets</h2>
+      <div class="grid-2">
+        <div class="card">
+          <video controls src="videos/president.mp4"></video>
+          <h3>Programme de tutorat</h3>
+          <p>Accompagnement académique par les pairs.</p>
         </div>
-        <hr>
-        <p class="text-center">&copy; 2023 Zap Agency. Tous droits réservés.</p>
-    </footer>
-    <script src="./Front_end/Styles/bootstrap/js/bootstrap.min.js"></script>
+        <div class="card">
+          <video controls src="videos/president.mp4"></video>
+          <h3>Campagne santé</h3>
+          <p>Sensibilisation et cliniques mobiles.</p>
+        </div>
+        <div class="card">
+          <video controls src="videos/president.mp4"></video>
+          <h3>Renforcement des capacités</h3>
+          <p>Sessions de formation pour les représentants étudiants.</p>
+        </div>
+        <div class="card">
+          <video controls src="videos/president.mp4"></video>
+          <h3>Actions communautaires</h3>
+          <p>Projets de volontariat et développement local.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="evenements" class="section">
+      <h2>Événements à venir</h2>
+      <ul class="events">
+        <li>Assemblée Générale — <span>12 Novembre 2025</span></li>
+        <li>Forum des Bourses — <span>20 Décembre 2025</span></li>
+      </ul>
+    </section>
+
+    <section id="bourses" class="section">
+      <h2>Bourses Étudiantes</h2>
+      <div class="grid-2">
+        <div class="card">
+          <img src="images/bourse1.png" alt="">
+          <h3>Bourse d’excellence</h3>
+          <p>Ouverte jusqu’au 31 Janvier 2026</p>
+        </div>
+        <div class="card">
+          <img src="images/bourse2.png" alt="">
+          <h3>Mobilité régionale</h3>
+          <p>Ouverte jusqu’au 10 Mars 2026</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="galerie" class="section">
+  <h2>Galerie photos</h2>
+  <p>
+    Découvrez à travers notre galerie les moments forts de la RNEC-RDC : réunions, ateliers, campagnes et événements qui illustrent l’engagement et la participation active des étudiants dans la vie universitaire et nationale. Ces images témoignent de notre dynamisme, de notre solidarité et de notre unité au service de la communauté estudiantine.
+  </p>
+  <br> <br>
+  <div class="grid-4">
+    <div class="card">
+      <img src="images/image4.png" alt="Événement RNEC 1">
+      <p>Assemblée générale des délégués étudiants</p>
+    </div>
+    <div class="card">
+      <img src="images/image3.png" alt="Événement RNEC 2">
+      <p>Atelier de formation leadership</p>
+    </div>
+    <div class="card">
+      <img src="images/image2.png" alt="Événement RNEC 3">
+      <p>Campagne santé et sensibilisation</p>
+    </div>
+    <div class="card">
+      <img src="images/event.png" alt="Événement RNEC 4">
+      <p>Forum des bourses et échanges étudiants</p>
+    </div>
+  </div>
+</section>
+    <section id="videos" class="section">
+      <h2>Vidéos</h2>
+      <div class="carousel">
+        <video class="active" src="videos/president.mp4" controls></video>
+        <video src="videos/president.mp4" controls></video>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <h2>Contact</h2>
+      <form id="contactForm">
+        <input type="text" id="name" placeholder="Nom complet" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <textarea id="message" rows="4" placeholder="Message..." required></textarea>
+        <button type="submit">Envoyer</button>
+        <p id="formMessage"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Coordination Nationale des Étudiants - RDC</p>
+    <div class="social">
+      <a href="#">Facebook</a>
+      <a href="#">Twitter</a>
+      <a href="#">Instagram</a>
+    </div>
+  </footer>
+
+  <script>
+    // Animation des sections au défilement
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('show');
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+    document.querySelectorAll('.section, .card, .member').forEach(el=>observer.observe(el));
+
+    // Carousel automatique
+    const videos = document.querySelectorAll('.carousel video');
+    let current = 0;
+    setInterval(()=>{
+      videos[current].classList.remove('active');
+      current = (current + 1) % videos.length;
+      videos[current].classList.add('active');
+    }, 7000);
+
+    // Formulaire
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', e=>{
+      e.preventDefault();
+      document.getElementById('formMessage').textContent = "Message envoyé avec succès !";
+      form.reset();
+    });
+
+    // Menu mobile
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('.nav-links');
+    toggle.addEventListener('click', ()=> nav.classList.toggle('show'));
+  </script>
 </body>
-
 </html>
-
-
-

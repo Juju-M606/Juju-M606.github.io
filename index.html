@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Représentation Nationale des Étudiants - RDC</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+    body{background:#f8fdfb;color:#03371e;scroll-behavior:smooth;}
+
+    /* --- Barre de navigation --- */
+    .navbar{background:#065c3d;color:#fff;padding:15px 0;position:sticky;top:0;z-index:100;}
+    .navbar .container{display:flex;align-items:center;justify-content:space-between;width:90%;margin:auto;flex-wrap:wrap;}
+    .logo{font-size:22px;font-weight:bold;}
+    .nav-links{list-style:none;display:flex;flex-wrap:wrap;gap:15px;}
+    .nav-links a{color:#fff;text-decoration:none;padding:8px 10px;transition:0.3s;}
+    .nav-links a:hover{background:#0b8c5a;border-radius:5px;}
+    .btn{background:#0b8c5a;color:#fff;padding:8px 15px;border:none;border-radius:5px;text-decoration:none;}
+    .btn:hover{background:#076f47;}
+    .menu-toggle{display:none;font-size:24px;cursor:pointer;}
+    @media(max-width:768px){
+      .nav-links{display:none;flex-direction:column;width:100%;background:#065c3d;padding:10px 0;}
+      .nav-links.show{display:flex;}
+      .menu-toggle{display:block;color:white;}
+    }
+
+    /* --- Section d'accueil --- */
+    .hero{
+      background:url('images/hero.png') center/cover no-repeat;color:#fff;text-align:center;padding:100px 20px;position:relative;}
+    .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.5);}
+    .hero-content{position:relative;z-index:2;}
+    .hero h2{font-size:32px;margin-bottom:10px;}
+    .hero p{margin-bottom:20px;font-size:18px;}
+    @media(max-width:600px){.hero h2{font-size:24px;}}
+
+    /* --- Sections --- */
+    .section{width:90%;margin:auto;padding:60px 0;text-align:center;opacity:0;transform:translateY(30px);transition:1s;}
+    .section.show{opacity:1;transform:translateY(0);}
+    .section h2{margin-bottom:25px;text-transform:uppercase;font-size:28px;}
+    .grid-2,.grid-3,.grid-4{display:grid;gap:20px;}
+    .grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+    .grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+    .grid-4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));}
+    
+    .card{background:#fff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);padding:15px;transition:0.3s;text-align:center;}
+    .card:hover{transform:translateY(-5px);}
+    .card img, .card video{width:100%;border-radius:8px;margin-bottom:10px;}
+    .member img{width:250px;height:250px;border-radius:50%;object-fit:cover;margin-bottom:10px;}
+    .events{list-style:none;text-align:left;max-width:500px;margin:auto;}
+    .events li{background:#fff;padding:10px;border-left:5px solid #0b8c5a;margin-bottom:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    .events span{float:right;color:#065c3d;font-weight:bold;}
+    .videos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;justify-items:center;}
+    .section ul{list-style:none;padding:0;margin-top:15px;}
+    .section ul li{margin-bottom:8px;font-size:15px;line-height:1.5;}
+    form{max-width:400px;margin:auto;display:flex;flex-direction:column;gap:10px;}
+    input,textarea{padding:10px;border:1px solid #ccc;border-radius:5px;}
+    button{background:#065c3d;color:#fff;padding:10px;border:none;border-radius:5px;cursor:pointer;}
+    button:hover{background:#0b8c5a;}
+    footer{background:#065c3d;color:#fff;text-align:center;padding:20px;margin-top:50px;}
+    .social a{color:#fff;text-decoration:none;margin:0 10px;transition:0.3s;}
+    .social a:hover{color:#00ff99;}
+    /* --- Uniformisation des vidéos dans la grille --- */
+.videos-grid .card video {
+  width: 100%;       /* largeur de la carte */
+  height: 200px;     /* même hauteur pour toutes les vidéos */
+  object-fit: cover; /* conserve le ratio, coupe si nécessaire */
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+/* Titres uniformes des vidéos */
+.videos-grid .card h3 {
+  font-size: 20px;
+  text-align: center;
+  min-height: 40px; /* même hauteur pour tous les titres */
+  color: #065c3d;
+  margin-bottom: 8px;
+}
+
+/* Textes descriptifs uniformes */
+.videos-grid .card p {
+  font-size: 14px;
+  text-align: center;
+  color: #333;
+  margin: 0;
+}
+  </style>
+</head>
+<body>
+
+ <header class="navbar">
+  <div class="container">
+    <h1 class="logo">
+      <span style="color: #007bff;">RNEC</span> - <span style="color: #ff6600;">RDC</span>
+    </h1>
+    <span class="menu-toggle">☰</span>
+    <ul class="nav-links">
+      <li><a href="#presentation">Présentation</a></li>
+      <li><a href="#actualites">Actualités</a></li>
+      <li><a href="#responsables">Responsables</a></li>
+      <li><a href="#activites">Activités</a></li>
+      <li><a href="#evenements">Événements</a></li>
+      <li><a href="#bourses">Bourses</a></li>
+      <li><a href="#galerie">Galerie</a></li>
+      <li><a href="#videos">Vidéos</a></li>
+      <li><a href="#contact" class="btn">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h2 style="font-size: 36px; text-align: center;">
+      <span style="color: #007bff;">La Représentation Nationale</span> 
+      <span style="color: #ff6600;">des Étudiants - RDC</span>
+    </h2>
+    <p style="font-size: 18px; color: #fff; margin-top: 15px;">
+      Unité • Action • Progrès
+    </p>
+    <a href="#activites" class="btn" style="margin-top: 20px;">Découvrir nos activités</a>
+  </div>
+</section>
+
+  <main>
+    <!-- SECTION PRÉSENTATION -->
+    <section id="presentation" class="section" style="padding: 40px 10%; background-color: #f9f9f9; border-radius: 15px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+        <div style="flex: 1; min-width: 280px; text-align: center;">
+          <img src="images/equipe.jpg" alt="Équipe RNEC"
+            style="width: 80%; max-width: 300px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+          <p style="margin-top: 8px; font-style: italic; font-size: 14px;">Équipe dirigeant de la RNEC-RDC</p>
+        </div>
+        <div style="flex: 2; min-width: 300px; text-align:left;">
+          <h2 style="font-size: 28px; margin-bottom: 15px;">
+            <span style="color: #007bff;">Présentation</span> 
+            <span style="color: #ff6600;">RNEC-RDC</span>
+          </h2>
+          <p style="line-height: 1.6; font-size: 16px;">
+            La <b>RNEC-RDC</b> (Représentation Nationale des Étudiants Congolais)
+            défend les droits des étudiants et encourage leur participation active à la vie universitaire et nationale.
+          </p>
+          <ul>
+            <li><b>Mission :</b> Représenter et défendre les intérêts des étudiants.</li>
+            <li><b>Vision :</b> Un mouvement uni, engagé et influent à travers le pays.</li>
+            <li><b>Valeurs :</b> Solidarité, transparence et inclusion.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION ACTUALITÉS -->
+    <section id="actualites" class="section">
+      <h2 style="font-size: 32px; text-align: center; margin-bottom: 30px;">
+        <span style="color: #007bff;">Actu</span><span style="color: #ff6600;">alités</span>
+      </h2>
+      <div class="grid-3">
+        <div class="card">
+          <img src="Images/event.png" alt="">
+          <h3>Campagne d'inscription</h3>
+          <p>Renforcement des délégués étudiants.</p>
+        </div>
+        <div class="card">
+          <img src="images/annonce.png" alt="">
+          <h3>Formation leadership</h3>
+          <p>Atelier pratique pour dirigeants.</p>
+        </div>
+        <div class="card">
+          <img src="images/bourses.png" alt="">
+          <h3>Bourse 2026</h3>
+          <p>Appel à candidatures pour étudiants méritants.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION RESPONSABLES -->
+    <section id="responsables" class="section">
+      <h2 style="font-size: 32px; text-align: center; margin-bottom: 30px;">
+        <span style="color: #007bff;">RESPON</span><span style="color: #ff6600;">SABLES</span>
+      </h2>
+      <p style="margin-bottom:30px;">
+        L’équipe dirigeante de la RNEC-RDC est composée de jeunes leaders engagés...
+      </p>
+      <div class="grid-4">
+        <div class="member">
+          <img src="Images/president.jpg" alt="Président">
+          <h4>Alex Bukasa Nkanka</h4>
+          <p>Président national des étudiants en RDC. Il coordonne les activités de la RNEC et représente les étudiants auprès des autorités universitaires et nationales.</p>
+        </div>
+        <div class="member">
+          <img src="Images/vicep.jpg" alt="Vice-Présidente">
+          <h4>L'or Mayi</h4>
+          <p>Vice-Présidente. Elle seconde la Présidente dans la coordination des activités, veille à la bonne organisation interne et représente la RNEC en cas d’absence de la Présidente.</p>
+        </div>
+        <div class="member">
+          <img src="Images/sg.jpg" alt="Secrétaire Générale">
+          <h4>JOSE Muepu</h4>
+          <p>Secrétaire Général. Il supervise l’organisation interne, la documentation et la communication administrative de la RNEC.</p>
+        </div>
+        <div class="member">
+          <img src="Images/porte.jpg" alt="Porte-parole national">
+          <h4>Prosper Mutemba</h4>
+          <p>Porte-parole national. Il assure la communication officielle de la RNEC, exprime les positions du mouvement et veille à la bonne diffusion des informations auprès des étudiants et des partenaires.</p>
+        </div>
+        <div class="member">
+          <img src="Images/ministre et p.e.jpg" alt="Ministre du Genre et de la Promotion des Étudiants">
+          <h4>Gedeon</h4>
+          <p>Ministre du Genre et de la Promotion des Étudiants. Il œuvre pour l’égalité des chances, encourage la participation active et promeut le leadership estudiantin.</p>
+        </div>
+        <div class="member">
+          <img src="Images/RP.jpg" alt="Relations publiques">
+          <h4>Giton Massimo Lilembu</h4>
+          <p>Chargé des relations publiques. Il œuvre pour l’égalité des chances, encourage la participation active et promeut le leadership estudiantin.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOUTON DE LANCEMENT DES VIDÉOS + SECTION ACTIVITÉS -->
+    <div style="text-align:center; margin-bottom:20px;">
+      <button id="startVideos" style="background:#007bff; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; font-size:16px;">
+        Lancer les vidéos
+      </button>
+    </div>
+
+    <section id="activites" class="section">
+      <h2 style="font-size: 32px; text-align: center; margin-bottom: 30px;">
+        <span style="color: #007bff;">Activités e</span><span style="color: #ff6600;">t projets</span>
+      </h2>
+      <div class="videos-grid" id="activitesVideos">
+        <div class="card">
+          <video playsinline src="videos/president.mp4"></video>
+          <h3>Programme de tutorat</h3>
+          <p>Accompagnement académique par les pairs.</p>
+        </div>
+        <div class="card">
+          <video playsinline src="videos/congo.mp4"></video>
+          <h3>Campagne santé</h3>
+          <p>Sensibilisation et cliniques mobiles.</p>
+        </div>
+        <div class="card">
+          <video playsinline src="videos/president.mp4"></video>
+          <h3>Renforcement des capacités</h3>
+          <p>Sessions de formation pour les représentants étudiants.</p>
+        </div>
+        <div class="card">
+          <video playsinline src="videos/congo.mp4"></video>
+          <h3>Actions communautaires</h3>
+          <p>Projets de volontariat et développement local.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION ÉVÉNEMENTS -->
+    <section id="evenements" class="section" style="padding: 50px 10%; background-color: #f9f9f9; border-radius: 15px;">
+      <h2 style="font-size: 32px; text-align: center; margin-bottom: 30px;">
+        <span style="color: #007bff;">Événements à</span><span style="color: #ff6600;"> Venir</span>
+      </h2>
+      <ul style="list-style: none; padding: 0; max-width: 500px; margin: 0 auto; font-size: 16px;">
+        <li style="margin-bottom: 10px; padding: 10px 15px; background: #fff; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.1);">
+          <b>Assemblée Générale</b> — <span style="color: #ff6600;">12 Novembre 2025</span>
+        </li>
+        <li style="margin-bottom: 10px; padding: 10px 15px; background: #fff; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.1);">
+          <b>Forum des Bourses</b> — <span style="color: #ff6600;">20 Décembre 2025</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- SECTION BOURSES -->
+    <section id="bourses" class="section" style="padding: 50px 10%; background-color: #ffffff; border-radius: 15px;">
+      <h2 style="font-size: 32px; text-align: center; margin-bottom: 30px;">
+        <span style="color: #007bff;">Bourses d</span><span style="color: #ff6600;"> Étudiants</span>
+      </h2>
+      <div class="grid-2">
+        <div class="card">
+          <img src="Images/bourses.png" alt="">
+          <h3>Bourse d’excellence</h3>
+          <p>Ouverte jusqu’au 31 Janvier 2026</p>
+        </div>
+        <div class="card">
+          <img src="Images/event.png" alt="">
+          <h3>Mobilité régionale</h3>
+          <p>Ouverte jusqu’au 10 Mars 2026</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION GALERIE -->
+    <section id="galerie" class="section">
+      <h2 style="font-size: 32px; text-align: center; margin-bottom: 30px;">
+        <span style="color: #007bff;">Galerie d</span><span style="color: #ff6600;">es photos</span>
+      </h2>
+      <div class="grid-4">
+        <div class="card"><img src="images/image4.png" alt=""><p>Assemblée générale des délégués étudiants</p></div>
+        <div class="card"><img src="images/image3.png" alt=""><p>Atelier de formation leadership</p></div>
+        <div class="card"><img src="images/image2.png" alt=""><p>Campagne santé et sensibilisation</p></div>
+        <div class="card"><img src="images/event.png" alt=""><p>Forum des bourses et échanges étudiants</p></div>
+      </div>
+    </section>
+
+    <!-- SECTION CONTACT -->
+    <section id="contact" class="section">
+      <h2 style="font-size: 32px; text-align: center; margin-bottom: 30px;">
+        <span style="color: #007bff;">Cont</span><span style="color: #ff6600;">act</span>
+      </h2>
+      <form id="contactForm">
+        <input type="text" id="name" placeholder="Nom complet" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <textarea id="message" rows="4" placeholder="Message..." required></textarea>
+        <button type="submit">Envoyer</button>
+        <p id="formMessage"></p>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Coordination Nationale des Étudiants - RDC</p>
+    <div class="social">
+      <a href="#">Facebook</a>
+      <a href="#">Twitter</a>
+      <a href="#">Instagram</a>
+    </div>
+  </footer>
+
+  <script>
+    // Menu mobile
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('.nav-links');
+    toggle.addEventListener('click', ()=> nav.classList.toggle('show'));
+
+    // Animation des sections
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('show');
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+    document.querySelectorAll('.section, .card, .member').forEach(el=>observer.observe(el));
+
+    // Formulaire
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', e=>{
+      e.preventDefault();
+      document.getElementById('formMessage').textContent = "Message envoyé avec succès !";
+      form.reset();
+    });
+
+    // Vidéos Activités avec son
+    document.getElementById('startVideos').addEventListener('click', () => {
+      const videos = document.querySelectorAll("#activitesVideos video");
+      let current = 0;
+      videos[current].play().catch(err => console.log("Erreur lecture vidéo:", err));
+      videos.forEach((video, index) => {
+        video.addEventListener("ended", () => {
+          const next = (index + 1) % videos.length;
+          videos[next].play().catch(err => console.log("Erreur lecture vidéo suivante:", err));
+        });
+      });
+      document.getElementById('startVideos').style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>

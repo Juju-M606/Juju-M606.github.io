@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Employé - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{margin:0;font-family:Arial, Helvetica, sans-serif;background:#f4f4f4;}
+.sidebar{width:260px;background:#1D1464;height:100vh;color:white;position:fixed;left:0;top:0;padding:20px;}
+.sidebar h2{text-align:center;margin-bottom:30px;}
+.sidebar a{display:block;padding:12px;color:white;border-radius:6px;margin:5px 0;text-decoration:none;}
+.sidebar a:hover{background:#0f0b3b;}
+.topbar{margin-left:260px;width:calc(100% - 260px);background:white;padding:15px 25px;position:fixed;top:0;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+.content{margin-left:260px;margin-top:80px;padding:20px;}
+h2{color:#1D1464;margin-bottom:20px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;}
+.card{background:white;padding:20px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);text-align:center;}
+.card i{font-size:40px;margin-bottom:10px;color:#1D1464;}
+.card h3{margin-bottom:5px;}
+.card p{color:#555;}
+</style>
+</head>
+
+<body>
+
+<!-- PROTECTION EMPLOYÉ -->
+<script>
+const user = JSON.parse(localStorage.getItem('currentUser'));
+if(!user || (user.role !== "employe" && user.role !== "rh")){
+    alert("Accès réservé aux employés !");
+    window.location.href = "../dashboard.html";
+}
+</script>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>ISTSH SYSTEM</h2>
+    <a href="../frontend/apropos.html"><i class="fa fa-home"></i>Apropos</a>
+    <a href="employe.html"><i class="fa fa-home"></i> Accueil Employé</a>
+    <a href="../rh/liste-employes.html"><i class="fa fa-users"></i> Mes Informations</a>
+      <a href="../frontend/profil.html"><i class="fa fa-users"></i> Voir mon profil</a>
+    <a href="../frontend/lagout.html"><i class="fa fa-sign-out"></i> Déconnexion</a>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <h3>Bienvenue dans notre page de gestion des Employé</h3>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+    <h2>Tableau de bord Employé</h2>
+
+    <div class="cards">
+        <div class="card">
+            <i class="fa fa-user"></i>
+            <h3>Mes Tâches</h3>
+            <p>Suivi des activités et missions assignées</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-users"></i>
+            <h3>Gestion Étudiants</h3>
+            <p>Voir et modifier les informations des étudiants</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-file-invoice"></i>
+            <h3>Rapports</h3>
+            <p>Consulter et générer des rapports RH et administratifs</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liste des Étudiants - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body{font-family:Arial, Helvetica, sans-serif;background:#f4f4f4;margin:0;padding:0;}
+.container{max-width:1000px;margin:50px auto;background:white;padding:30px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+h2{text-align:center;margin-bottom:20px;color:#1D1464;}
+button{padding:8px 12px;background:#1D1464;color:white;border:none;border-radius:5px;cursor:pointer;margin:2px;}
+button:hover{background:#0f0b3b;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th, td{padding:12px;border-bottom:1px solid #ddd;text-align:left;}
+th{background:#1D1464;color:white;cursor:pointer;}
+tr:hover{background:#f1f1f1;}
+.action-btn{padding:5px 10px;border:none;color:white;border-radius:5px;cursor:pointer;}
+.update{background:orange;}
+.delete{background:red;}
+.search-filter{margin:15px 0; display:flex; gap:10px;}
+.search-filter input, .search-filter select{flex:1;padding:8px;border-radius:5px;border:1px solid #bbb;}
+.topbar{background:#1D1464;color:white;padding:15px;text-align:center;font-size:1.5rem;font-weight:bold;margin-bottom:20px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">Liste des Étudiants</div>
+
+<div class="container">
+
+    <div class="search-filter">
+        <input type="text" id="searchInput" placeholder="Rechercher par nom ou filière" onkeyup="searchStudents()">
+        <select id="filterFiliere" onchange="filterFiliere()">
+            <option value="">Toutes les filières</option>
+        </select>
+        <button onclick="goAdd()">Ajouter Étudiant <i class="fa fa-plus"></i></button>
+    </div>
+
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Matricule</th>
+                <th onclick="sortTable(1)">Nom</th>
+                <th onclick="sortTable(2)">Prénom</th>
+                <th onclick="sortTable(3)">Sexe</th>
+                <th onclick="sortTable(4)">Filière</th>
+                <th onclick="sortTable(5)">Niveau</th>
+                <th onclick="sortTable(6)">Année</th>
+                <th onclick="sortTable(7)">Statut</th>
+                <th onclick="sortTable(8)">Note</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+let students = JSON.parse(localStorage.getItem('students')) || [];
+
+function renderTable(){
+    const tbody=document.getElementById('studentTable').getElementsByTagName('tbody')[0];
+    tbody.innerHTML='';
+    const filieres=new Set();
+    students.forEach((stu,index)=>{
+        filieres.add(stu.filiere);
+        const row=tbody.insertRow();
+        row.insertCell(0).innerText=stu.matricule;
+        row.insertCell(1).innerText=stu.nom;
+        row.insertCell(2).innerText=stu.prenom;
+        row.insertCell(3).innerText=stu.sexe;
+        row.insertCell(4).innerText=stu.filiere;
+        row.insertCell(5).innerText=stu.niveau;
+        row.insertCell(6).innerText=stu.annee;
+        row.insertCell(7).innerText=stu.statut;
+        row.insertCell(8).innerText=stu.note;
+        const actionCell=row.insertCell(9);
+        actionCell.innerHTML=`<button class="action-btn update" onclick="editStudent(${index})">Modifier</button>
+                              <button class="action-btn delete" onclick="deleteStudent(${index})">Supprimer</button>`;
+    });
+    populateFiliereFilter([...filieres]);
+}
+
+function populateFiliereFilter(filieres){
+    const filter=document.getElementById('filterFiliere');
+    filter.innerHTML='<option value="">Toutes les filières</option>';
+    filieres.forEach(f=>filter.innerHTML+=`<option value="${f}">${f}</option>`);
+}
+
+function searchStudents(){
+    const query=document.getElementById('searchInput').value.toLowerCase();
+    const tbody=document.getElementById('studentTable').getElementsByTagName('tbody')[0];
+    Array.from(tbody.rows).forEach(row=>{
+        const nom=row.cells[1].innerText.toLowerCase();
+        const filiere=row.cells[4].innerText.toLowerCase();
+        row.style.display=(nom.includes(query)||filiere.includes(query))?'':'none';
+    });
+}
+
+function filterFiliere(){
+    const filiere=document.getElementById('filterFiliere').value;
+    const tbody=document.getElementById('studentTable').getElementsByTagName('tbody')[0];
+    Array.from(tbody.rows).forEach(row=>{
+        row.style.display=(filiere===''||row.cells[4].innerText===filiere)?'':'none';
+    });
+}
+
+function sortTable(colIndex){
+    const keys=['matricule','nom','prenom','sexe','filiere','niveau','annee','statut','note'];
+    students.sort((a,b)=>{
+        if(colIndex===8) return a[keys[colIndex]]-b[keys[colIndex]];
+        return a[keys[colIndex]].localeCompare(b[keys[colIndex]]);
+    });
+    localStorage.setItem('students',JSON.stringify(students));
+    renderTable();
+}
+
+function deleteStudent(index){
+    if(confirm('Voulez-vous vraiment supprimer cet étudiant ?')){
+        students.splice(index,1);
+        localStorage.setItem('students',JSON.stringify(students));
+        renderTable();
+    }
+}
+
+function editStudent(index){
+    localStorage.setItem('editIndex',index);
+    window.location.href='nouvelle_etudiant.html';
+}
+
+function goAdd(){ window.location.href='nouvelle_etudiant.html'; }
+
+// Initialisation
+renderTable();
+</script>
+
+</body>
+</html>

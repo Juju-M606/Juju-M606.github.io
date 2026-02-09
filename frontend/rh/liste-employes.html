@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestion RH - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{background:#f4f4f4;display:flex;}
+.sidebar{width:260px;background:#1D1464;height:100vh;color:white;position:fixed;left:0;top:0;padding:20px;}
+.sidebar h2{text-align:center;margin-bottom:30px;}
+.sidebar a{display:block;padding:12px;color:white;border-radius:6px;margin:5px 0;text-decoration:none;}
+.sidebar a:hover{background:#0f0b3b;}
+.topbar{margin-left:260px;width:calc(100% - 260px);background:white;padding:15px 25px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+.content{margin-left:260px;margin-top:80px;padding:20px;}
+h2{margin-bottom:20px;}
+.btn{padding:10px 15px;border:none;background:#1D1464;color:white;border-radius:5px;cursor:pointer;margin-right:10px;}
+.btn:hover{background:#0f0b3b;}
+.form-container{background:white;padding:20px;border-radius:10px;margin-top:20px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+input, select{width:100%;padding:10px;margin:8px 0;border-radius:5px;border:1px solid #bbb;}
+label{font-weight:bold;}
+table{width:100%;background:white;border-collapse:collapse;margin-top:25px;border-radius:10px;overflow:hidden;}
+th, td{padding:12px;border-bottom:1px solid #ddd;text-align:left;cursor:pointer;}
+th{background:#1D1464;color:white;}
+tr:hover{background:#f1f1f1;}
+.action-btn{padding:7px 12px;border:none;color:white;border-radius:5px;cursor:pointer;margin-right:5px;}
+.update{background:orange;}
+.delete{background:red;}
+.message{display:none;padding:10px;margin:10px 0;border-radius:5px;font-weight:bold;}
+.success{background:#d4edda;color:#155724;}
+.error{background:#f8d7da;color:#721c24;}
+.search-filter{margin:15px 0; display:flex; gap:10px;}
+.search-filter input, .search-filter select{width:auto;flex:1;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>ISTSH SYSTEM</h2>
+  <a href="../dashboard.html"><i class="fa fa-home"></i> Tableau de bord</a>
+  <a href="../stock/ajouter-stock.html"><i class="fa fa-box"></i> Gestion Stock</a>
+  <a href="ajouter-employe.html"><i class="fa fa-users"></i> Ressources Humaines</a>
+  <a href="../facturation/facturation.html"><i class="fa fa-file-invoice"></i> Facturation</a>
+  <a href="../scolarité/scolarité.html"><i class="fa fa-graduation-cap"></i> Scolarité</a>
+  <a href="../frontend/lagout.html"><i class="fa fa-sign-out"></i> Déconnexion</a>
+</div>
+
+<div class="topbar"><h3>Gestion Ressources Humaines</h3></div>
+
+<div class="content">
+<h2>Liste des employés</h2>
+
+<div id="msg" class="message"></div>
+
+<!-- Recherche -->
+<div class="search-filter">
+  <input type="text" id="searchInput" placeholder="Rechercher par nom, prénom ou poste" onkeyup="applyFilters()">
+  <select id="filterPoste" onchange="applyFilters()">
+    <option value="">Tous les postes</option>
+  </select>
+</div>
+
+<!-- Formulaire ajout/modification -->
+<div class="form-container">
+  <h3>Ajouter / Modifier un employé</h3>
+  <label>Matricule</label>
+  <input type="text" id="matricule" placeholder="Ex : EMP001">
+  <label>Nom</label>
+  <input type="text" id="nom" placeholder="Ex : Mukendi">
+  <label>Prénom</label>
+  <input type="text" id="prenom" placeholder="Ex : Jean">
+  <label>Poste</label>
+  <select id="poste">
+    <option value="Directeur">Directeur</option>
+    <option value="Comptable">Comptable</option>
+    <option value="Secrétaire">Secrétaire</option>
+    <option value="Technicien">Technicien</option>
+    <option value="Autre">Autre</option>
+  </select>
+  <label>Téléphone</label>
+  <input type="text" id="tel" placeholder="Ex : 0999123456">
+  <button class="btn" onclick="saveEmployee()">Enregistrer</button>
+  <button class="btn" style="background:red;" onclick="clearForm()">Annuler</button>
+</div>
+
+<!-- Tableau -->
+<table id="employeeTable">
+  <thead>
+    <tr>
+      <th onclick="sortTable(0)">Matricule</th>
+      <th onclick="sortTable(1)">Nom</th>
+      <th onclick="sortTable(2)">Prénom</th>
+      <th onclick="sortTable(3)">Poste</th>
+      <th onclick="sortTable(4)">Téléphone</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+</div>
+
+<script>
+let employees = JSON.parse(localStorage.getItem('employees')) || [];
+let editingIndex = null;
+
+function showMessage(text,type='success'){
+    const msg=document.getElementById('msg');
+    msg.textContent=text;
+    msg.className=`message ${type}`;
+    msg.style.display='block';
+    setTimeout(()=>{msg.style.display='none';},2500);
+}
+
+function renderTable(){
+    const tbody=document.getElementById('employeeTable').querySelector('tbody');
+    tbody.innerHTML='';
+    const postes = new Set();
+    employees.forEach((e,i)=>{
+        postes.add(e.poste);
+        const tr=tbody.insertRow();
+        tr.insertCell(0).innerText=e.matricule;
+        tr.insertCell(1).innerText=e.nom;
+        tr.insertCell(2).innerText=e.prenom;
+        tr.insertCell(3).innerText=e.poste;
+        tr.insertCell(4).innerText=e.tel;
+        const actionCell=tr.insertCell(5);
+        actionCell.innerHTML=`<button class="action-btn update" onclick="editEmployee(${i})">Modifier</button>
+                              <button class="action-btn delete" onclick="deleteEmployee(${i})">Supprimer</button>`;
+    });
+    populatePosteFilter([...postes]);
+    applyFilters();
+}
+
+function populatePosteFilter(postes){
+    const filter=document.getElementById('filterPoste');
+    filter.innerHTML=`<option value="">Tous les postes</option>`;
+    postes.forEach(p=>filter.innerHTML+=`<option value="${p}">${p}</option>`);
+}
+
+function clearForm(){
+    document.getElementById('matricule').value='';
+    document.getElementById('nom').value='';
+    document.getElementById('prenom').value='';
+    document.getElementById('poste').value='Directeur';
+    document.getElementById('tel').value='';
+    editingIndex=null;
+}
+
+function saveEmployee(){
+    const matricule=document.getElementById('matricule').value.trim();
+    const nom=document.getElementById('nom').value.trim();
+    const prenom=document.getElementById('prenom').value.trim();
+    const poste=document.getElementById('poste').value;
+    const tel=document.getElementById('tel').value.trim();
+    if(!matricule||!nom||!prenom||!tel){ showMessage('Veuillez remplir tous les champs','error'); return; }
+    if(editingIndex===null && employees.some(e=>e.matricule===matricule)){ showMessage('Matricule déjà existant','error'); return; }
+    const emp={matricule,nom,prenom,poste,tel};
+    if(editingIndex!==null){ employees[editingIndex]=emp; showMessage('Employé modifié'); }
+    else{ employees.push(emp); showMessage('Employé ajouté'); }
+    localStorage.setItem('employees',JSON.stringify(employees));
+    renderTable();
+    clearForm();
+}
+
+function editEmployee(index){
+    editingIndex=index;
+    const e=employees[index];
+    document.getElementById('matricule').value=e.matricule;
+    document.getElementById('nom').value=e.nom;
+    document.getElementById('prenom').value=e.prenom;
+    document.getElementById('poste').value=e.poste;
+    document.getElementById('tel').value=e.tel;
+}
+
+function deleteEmployee(index){
+    if(confirm('Voulez-vous vraiment supprimer cet employé ?')){
+        employees.splice(index,1);
+        localStorage.setItem('employees',JSON.stringify(employees));
+        renderTable();
+        showMessage('Employé supprimé');
+    }
+}
+
+function applyFilters(){
+    const query=document.getElementById('searchInput').value.toLowerCase();
+    const filterPoste=document.getElementById('filterPoste').value;
+    const tbody=document.getElementById('employeeTable').querySelector('tbody');
+    Array.from(tbody.rows).forEach(row=>{
+        const nom=row.cells[1].innerText.toLowerCase();
+        const prenom=row.cells[2].innerText.toLowerCase();
+        const poste=row.cells[3].innerText;
+        const matchQuery=nom.includes(query)||prenom.includes(query);
+        const matchPoste=filterPoste===''||poste===filterPoste;
+        row.style.display=(matchQuery && matchPoste)?'':'none';
+    });
+}
+
+function sortTable(col){
+    const keys=['matricule','nom','prenom','poste','tel'];
+    employees.sort((a,b)=>{
+        return a[keys[col]].localeCompare(b[keys[col]]);
+    });
+    localStorage.setItem('employees',JSON.stringify(employees));
+    renderTable();
+}
+
+renderTable();
+</script>
+
+</body>
+</html>

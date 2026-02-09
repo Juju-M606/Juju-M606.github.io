@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISTSH – Plateforme de Gestion</title>
+
+    <!-- ICONES -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ======== GENERAL ======== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ======== NAVBAR ======== */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #1d1d1d;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 30px;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        nav .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        nav .logo img {
+            width: 55px;
+            margin-right: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            padding: 6px 12px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: #dac509;
+            border-radius: 6px;
+        }
+
+        nav ul li .dropdown {
+            display: none;
+            position: absolute;
+            top: 36px;
+            left: 0;
+            background-color: #1d1d1d;
+            padding: 10px 0;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        nav ul li:hover .dropdown {
+            display: block;
+        }
+
+        nav ul li .dropdown a {
+            display: block;
+            padding: 8px 20px;
+        }
+
+        nav .btn {
+            background-color: #ff9800;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        nav .btn:hover {
+            background-color: #0a0a0a;
+        }
+
+        /* ===== PROFIL DROITE ===== */
+        .profile-menu {
+            position: relative;
+            cursor: pointer;
+            font-size: 28px;
+        }
+
+        .profile-menu i {
+            color: white;
+        }
+
+        .dropdown-profile {
+            position: absolute;
+            right: 0;
+            top: 38px;
+            background-color: #1d1d1d;
+            padding: 10px 0;
+            border-radius: 6px;
+            display: none;
+            min-width: 160px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .dropdown-profile a {
+            display: block;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        .dropdown-profile a:hover {
+            background-color: #dac509;
+        }
+
+        .profile-menu:hover .dropdown-profile {
+            display: block;
+        }
+
+        /* ======== HERO SECTION ======== */
+        .hero {
+            margin-top: 70px;
+            background: url('./assets/styles/images/plan.png') center/cover no-repeat;
+            height: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .hero .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 25px;
+        }
+
+        .hero .btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            border-radius: 8px;
+            background-color: #ff9800;
+            color: #eee7e7;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .hero .btn:hover {
+            background-color: #080808;
+        }
+
+        /* ======== SECTIONS ======== */
+        section {
+            padding: 80px 20px;
+        }
+
+        section.bg-light {
+            background-color: #f9f9f9;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.10rem;
+            font-weight: bold;
+            margin-bottom: 50px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .card-mod {
+            background-color: white;
+            padding: 20px;
+            width: 300px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .card-mod:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        footer {
+            background-color: #1d1d1d;
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">
+            <img src="./assets/styles/images/logo ists.png" alt="logo">
+            ISTSH SYSTEM
+        </div>
+
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="../apropos.html">À propos</a></li>
+            <li><a href="../frontend/contact.html">Contact</a></li>
+            <li>
+                <a href="#">Programme <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown">
+                    <a href="../frontend/stock/liste-stock.html">Gestion de stock/a>
+                    <a href="../frontend/rh/rh.html">Gestion Rh</a>
+                    <a href="../frontend/facturation/facturation.html">Facturation</a>
+                    <a href="../frontend/inscription.html">Scolarité</a>
+                     <a href="../frontend/profil.html">Scolarité</a>
+                </div>
+            </li>
+       
+            <li><a href="login.html" class="btn">Connexion</a></li>
+        </ul>
+
+        <!-- PROFIL + DECONNEXION -->
+        <div class="profile-menu">
+            <i class="fa fa-user-circle"></i>
+            <div class="dropdown-profile">
+                <a href="profil.html"><i class="fa fa-user"></i> Mon Profil</a>
+                <a href="logout.html"><i class="fa fa-sign-out-alt"></i> Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="content">
+            <h1 id="typing"></h1>
+            <p>Formation • Administration • Scolarité • Gestion</p>
+            <a href="login.html" class="btn">Commencer</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        © 2025 – ISTSH| Tous droits réservés.
+    </footer>
+
+    <script>
+        const text = "Bienvenue à l’Institut Supérieur Technique Song Hwa (ISTSH)";
+        let i = 0;
+        function typeEffect() {
+            if (i < text.length) {
+                document.getElementById("typing").innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeEffect, 50);
+            }
+        }
+        window.onload = typeEffect;
+    </script>
+
+</body>
+</html>

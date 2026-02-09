@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nouvel Étudiant - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body{font-family:Arial, Helvetica, sans-serif;background:#f4f4f4;margin:0;padding:0;}
+.container{max-width:600px;margin:50px auto;background:white;padding:30px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+h2{text-align:center;margin-bottom:20px;color:#1D1464;}
+label{display:block;font-weight:bold;margin-top:10px;}
+input, select{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:1px solid #bbb;}
+button{padding:10px 20px;background:#1D1464;color:white;border:none;border-radius:5px;cursor:pointer;margin-top:20px;}
+button:hover{background:#0f0b3b;}
+.message{display:none;padding:10px;margin-bottom:10px;border-radius:5px;font-weight:bold;}
+.success{background:#d4edda;color:#155724;}
+.error{background:#f8d7da;color:#721c24;}
+.topbar{background:#1D1464;color:white;padding:15px;text-align:center;font-size:1.5rem;font-weight:bold;margin-bottom:20px;}
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbarTitle">Ajouter un Nouvel Étudiant</div>
+
+<div class="container">
+    <div id="msg" class="message"></div>
+
+    <label>Matricule</label>
+    <input type="text" id="matricule" placeholder="Ex : ISTS2025-001">
+
+    <label>Nom</label>
+    <input type="text" id="nom" placeholder="Ex : Mukendi">
+
+    <label>Prénom</label>
+    <input type="text" id="prenom" placeholder="Ex : Jean">
+
+    <label>Date de naissance</label>
+    <input type="date" id="dob">
+
+    <label>Sexe</label>
+    <select id="sexe">
+        <option value="Masculin">Masculin</option>
+        <option value="Féminin">Féminin</option>
+    </select>
+
+    <label>Filière</label>
+    <select id="filiere">
+        <option value="Informatique">Informatique</option>
+        <option value="Gestion">Gestion</option>
+        <option value="Droit">Droit</option>
+        <option value="Médecine">Médecine</option>
+        <option value="Autre">Autre</option>
+    </select>
+
+    <label>Niveau (Promotion)</label>
+    <select id="niveau">
+        <option value="Licence 1">Licence 1</option>
+        <option value="Licence 2">Licence 2</option>
+        <option value="Licence 3">Licence 3</option>
+        <option value="Master 1">Master 1</option>
+        <option value="Master 2">Master 2</option>
+    </select>
+
+    <label>Année académique</label>
+    <input type="text" id="annee" placeholder="Ex : 2025-2026">
+
+    <label>Statut</label>
+    <select id="statut">
+        <option value="Inscrit">Inscrit</option>
+        <option value="Redoublant">Redoublant</option>
+        <option value="Diplômé">Diplômé</option>
+    </select>
+
+    <label>Note</label>
+    <input type="number" id="note" placeholder="Ex : 75">
+
+    <button id="saveBtn">Enregistrer</button>
+    <button style="background:red;" onclick="goBack()">Retour</button>
+</div>
+
+<script>
+let students = JSON.parse(localStorage.getItem('students')) || [];
+let editIndex = localStorage.getItem('editIndex')!==null ? parseInt(localStorage.getItem('editIndex')) : null;
+
+window.onload = function(){
+    if(editIndex!==null){
+        const stu = students[editIndex];
+        document.getElementById('matricule').value = stu.matricule;
+        document.getElementById('nom').value = stu.nom;
+        document.getElementById('prenom').value = stu.prenom;
+        document.getElementById('dob').value = stu.dob;
+        document.getElementById('sexe').value = stu.sexe;
+        document.getElementById('filiere').value = stu.filiere;
+        document.getElementById('niveau').value = stu.niveau;
+        document.getElementById('annee').value = stu.annee;
+        document.getElementById('statut').value = stu.statut;
+        document.getElementById('note').value = stu.note;
+        document.getElementById('topbarTitle').textContent = 'Mettre à jour Étudiant';
+        document.getElementById('saveBtn').textContent = 'Mettre à jour';
+    }
+};
+
+function showMessage(text,type='success'){
+    const msg=document.getElementById('msg');
+    msg.textContent=text;
+    msg.className=`message ${type}`;
+    msg.style.display='block';
+    setTimeout(()=>{msg.style.display='none';},2500);
+}
+
+document.getElementById('saveBtn').onclick = function(){
+    const matricule=document.getElementById('matricule').value.trim();
+    const nom=document.getElementById('nom').value.trim();
+    const prenom=document.getElementById('prenom').value.trim();
+    const dob=document.getElementById('dob').value;
+    const sexe=document.getElementById('sexe').value;
+    const filiere=document.getElementById('filiere').value;
+    const niveau=document.getElementById('niveau').value;
+    const annee=document.getElementById('annee').value.trim();
+    const statut=document.getElementById('statut').value;
+    const note=document.getElementById('note').value.trim();
+
+    if(!matricule||!nom||!prenom||!dob||!annee||!note){
+        showMessage('Veuillez remplir tous les champs','error'); return;
+    }
+
+    if(editIndex===null && students.some(s=>s.matricule===matricule)){
+        showMessage('Matricule déjà existant','error'); return;
+    }
+
+    const student={matricule,nom,prenom,dob,sexe,filiere,niveau,annee,statut,note};
+
+    if(editIndex!==null){
+        students[editIndex]=student;
+        localStorage.removeItem('editIndex');
+        showMessage('Étudiant mis à jour avec succès !');
+    } else {
+        students.push(student);
+        showMessage('Étudiant ajouté avec succès !');
+    }
+
+    localStorage.setItem('students',JSON.stringify(students));
+    setTimeout(()=>{window.location.href='liste_etudiants.html';},1000);
+};
+
+function goBack(){
+    localStorage.removeItem('editIndex');
+    window.location.href='liste_etudiants.html';
+}
+</script>
+
+</body>
+</html>

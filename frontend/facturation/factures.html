@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestion Stock - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{background:#f4f4f4;display:flex;}
+/* SIDEBAR */
+.sidebar{width:260px;background:#1D1464;height:100vh;color:white;position:fixed;left:0;top:0;padding:20px;}
+.sidebar h2{text-align:center;margin-bottom:30px;}
+.sidebar a{display:block;padding:12px;color:white;border-radius:6px;margin:5px 0;text-decoration:none;}
+.sidebar a:hover{background:#0f0b3b;}
+/* TOPBAR */
+.topbar{margin-left:260px;width:calc(100% - 260px);background:white;padding:15px 25px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+/* CONTENT */
+.content{margin-left:260px;margin-top:80px;padding:20px;}
+h2{margin-bottom:20px;}
+.btn{padding:10px 15px;border:none;background:#1D1464;color:white;border-radius:5px;cursor:pointer;margin-right:10px;}
+.btn:hover{background:#0f0b3b;}
+.form-container{background:white;padding:20px;border-radius:10px;margin-top:20px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+input, select{width:100%;padding:10px;margin:8px 0;border-radius:5px;border:1px solid #bbb;}
+label{font-weight:bold;}
+table{width:100%;background:white;border-collapse:collapse;margin-top:25px;border-radius:10px;overflow:hidden;}
+th, td{padding:12px;border-bottom:1px solid #ddd;text-align:left;}
+th{background:#1D1464;color:white;}
+tr:hover{background:#f1f1f1;}
+.action-btn{padding:7px 12px;border:none;color:white;border-radius:5px;cursor:pointer;}
+.update{background:orange;}
+.delete{background:red;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>ISTSH SYSTEM</h2>
+<a href="dashboard.html"><i class="fa fa-home"></i> Tableau de bord</a>
+<a href="stock.html"><i class="fa fa-box"></i> Gestion Stock</a>
+<a href="rh.html"><i class="fa fa-users"></i> Ressources Humaines</a>
+<a href="facturation.html"><i class="fa fa-file-invoice"></i> Facturation</a>
+<a href="scolarité.html"><i class="fa fa-graduation-cap"></i> Scolarité</a>
+<a href="logout.html"><i class="fa fa-sign-out"></i> Déconnexion</a>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+<h3>Gestion de Stock</h3>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+<h2>Stock des produits</h2>
+
+<!-- Boutons -->
+<button class="btn" onclick="showForm()"><i class="fa fa-plus"></i> Ajouter Produit</button>
+<button class="btn" onclick="updateStock()"><i class="fa fa-edit"></i> Mettre à jour</button>
+<button class="btn" onclick="printTable()"><i class="fa fa-print"></i> Imprimer</button>
+
+<!-- FORMULAIRE AJOUT -->
+<div class="form-container" id="formAdd" style="display:none;">
+<h3>Ajouter / Modifier un produit</h3>
+<label>Nom du produit</label>
+<input type="text" id="nom" placeholder="Ex : Ordinateur">
+<label>Catégorie</label>
+<input type="text" id="categorie" placeholder="Ex : Informatique">
+<label>Quantité</label>
+<input type="number" id="quantite" placeholder="Ex : 25">
+<label>Fournisseur</label>
+<input type="text" id="fournisseur" placeholder="Ex : FBN Company">
+<button class="btn" onclick="saveStock()">Enregistrer</button>
+<button class="btn" style="background:red;" onclick="hideForm()">Annuler</button>
+</div>
+
+<!-- TABLEAU -->
+<table id="stockTable">
+<thead>
+<tr>
+<th>Nom</th>
+<th>Catégorie</th>
+<th>Quantité</th>
+<th>Fournisseur</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<!-- Dynamique -->
+</tbody>
+</table>
+
+</div>
+
+<script>
+let editingIndex = null;
+let stock = JSON.parse(localStorage.getItem('stock')) || [];
+
+function renderTable(){
+    const tbody = document.getElementById('stockTable').getElementsByTagName('tbody')[0];
+    tbody.innerHTML = '';
+    stock.forEach((item, index)=>{
+        const row = tbody.insertRow();
+        row.insertCell(0).innerText=item.nom;
+        row.insertCell(1).innerText=item.categorie;
+        row.insertCell(2).innerText=item.quantite;
+        row.insertCell(3).innerText=item.fournisseur;
+        const cellAction=row.insertCell(4);
+        cellAction.innerHTML=`<button class="action-btn update" onclick="editStock(${index})">Modifier</button>
+                                <button class="action-btn delete" onclick="deleteStock(${index})">Supprimer</button>`;
+    });
+}
+
+function showForm(){ document.getElementById('formAdd').style.display='block'; clearForm(); }
+function hideForm(){ document.getElementById('formAdd').style.display='none'; editingIndex=null; }
+function clearForm(){
+    document.getElementById('nom').value='';
+    document.getElementById('categorie').value='';
+    document.getElementById('quantite').value='';
+    document.getElementById('fournisseur').value='';
+}
+
+function saveStock(){
+    const nom=document.getElementById('nom').value.trim();
+    const categorie=document.getElementById('categorie').value.trim();
+    const quantite=document.getElementById('quantite').value.trim();
+    const fournisseur=document.getElementById('fournisseur').value.trim();
+    if(!nom || !categorie || !quantite || !fournisseur){ alert('Veuillez remplir tous les champs'); return; }
+    const prod={nom,categorie,quantite,fournisseur};
+    if(editingIndex!==null) stock[editingIndex]=prod; else stock.push(prod);
+    localStorage.setItem('stock',JSON.stringify(stock));
+    renderTable(); hideForm();
+}
+
+function editStock(index){
+    editingIndex=index;
+    const prod=stock[index];
+    document.getElementById('nom').value=prod.nom;
+    document.getElementById('categorie').value=prod.categorie;
+    document.getElementById('quantite').value=prod.quantite;
+    document.getElementById('fournisseur').value=prod.fournisseur;
+    showForm();
+}
+
+function deleteStock(index){
+    if(confirm('Voulez-vous vraiment supprimer ce produit ?')){
+        stock.splice(index,1);
+        localStorage.setItem('stock',JSON.stringify(stock));
+        renderTable();
+    }
+}
+
+function updateStock(){ alert('Fonction mise à jour à connecter au backend'); }
+
+function printTable(){
+    const table = document.getElementById('stockTable');
+    if(!table){ alert('Tableau introuvable !'); return; }
+    const newWin=window.open('','', 'width=800,height=600');
+    newWin.document.write('<html><head><title>Impression Stock</title>');
+    newWin.document.write('<style>table{width:100%;border-collapse:collapse;font-family:Arial, Helvetica, sans-serif;}th,td{border:1px solid #000;padding:8px;text-align:left;}th{background:#1D1464;color:white;}</style>');
+    newWin.document.write('</head><body>');
+    newWin.document.write('<h2>Liste des Produits - ISTSH SYSTEM</h2>');
+    newWin.document.write(table.outerHTML);
+    newWin.document.write('</body></html>');
+    newWin.document.close();
+    newWin.focus();
+    newWin.print();
+    newWin.close();
+}
+
+// Initialisation
+renderTable();
+</script>
+
+</body>
+</html>
+

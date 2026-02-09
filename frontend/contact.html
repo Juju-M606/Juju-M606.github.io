@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f4f4;
+}
+
+.container{
+    width:90%;
+    max-width:1100px;
+    margin:40px auto;
+}
+
+h2{
+    font-size:28px;
+    color:#1D1464;
+    margin-bottom:20px;
+}
+
+.contact-box{
+    display:flex;
+    gap:30px;
+}
+
+.form{
+    flex:1;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+.form input, .form textarea{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:16px;
+}
+
+.form button{
+    background:#1D1464;
+    padding:10px 20px;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.form button:hover{
+    background:#0f0b3b;
+}
+
+.map{
+    flex:1;
+}
+
+.map iframe{
+    width:100%;
+    height:350px;
+    border:0;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Contactez l’ISTSH</h2>
+
+    <div class="contact-box">
+
+        <div class="form">
+            <h3>Envoyer un message</h3>
+
+            <input type="text" placeholder="Votre nom">
+            <input type="email" placeholder="Votre email">
+            <input type="text" placeholder="Objet">
+            <textarea rows="5" placeholder="Votre message"></textarea>
+
+            <button>Envoyer</button>
+        </div>
+
+        <div class="map">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1986.190!2d29.2546!3d-1.6782" 
+                allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

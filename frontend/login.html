@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{background:#f0f0f0;display:flex;justify-content:center;align-items:center;height:100vh;}
+.login-container{background:white;padding:40px;border-radius:10px;box-shadow:0 0 20px rgba(0,0,0,0.2);width:380px;}
+h2{text-align:center;margin-bottom:25px;color:#1D1464;}
+.input-box{margin-bottom:20px;}
+.input-box label{display:block;margin-bottom:6px;font-weight:bold;color:#333;}
+.input-box input, .input-box select{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;font-size:15px;}
+.btn-login{width:100%;padding:12px;background:#1D1464;color:white;border:none;border-radius:6px;font-size:17px;cursor:pointer;}
+.btn-login:hover{background:#140f4d;}
+.other-links{text-align:center;margin-top:15px;}
+.other-links a{color:#1D1464;text-decoration:none;font-size:14px;margin:0 5px;}
+</style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2><i class="fa fa-lock"></i> Connexion</h2>
+    <div class="input-box">
+        <label>Email :</label>
+        <input type="email" id="email" placeholder="Entrez votre email" required>
+    </div>
+    <div class="input-box">
+        <label>Mot de passe :</label>
+        <input type="password" id="password" placeholder="Entrez votre mot de passe" required>
+    </div>
+    <div class="input-box">
+        <label>Rôle :</label>
+        <select id="role" required>
+            <option value="">-- Choisir un rôle --</option>
+            <option value="admin">Admini</option>
+            <option value="etudiant">Étudiant</option>
+            <option value="employe">Employé</option>
+        </select>
+    </div>
+    <button class="btn-login" onclick="loginUser()">Se connecter</button>
+    <div class="other-links">
+        <a href="#">Mot de passe oublié ?</a> |
+        <a href="#">Créer un compte</a>
+    </div>
+</div>
+
+<script>
+const users = [
+    { email: 'admin@ists.com', password: 'admin123', role: 'admin' },
+    { email: 'etudiant@ists.com', password: 'etud123', role: 'etudiant' },
+    { email: 'employe@ists.com', password: 'emp123', role: 'employe' }
+];
+
+function loginUser(){
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const role = document.getElementById('role').value;
+
+    const user = users.find(u => u.email === email && u.password === password && u.role === role);
+    if(user){
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        if(role === 'admin') window.location.href = 'dashboard.html';
+        else if(role === 'etudiant') window.location.href = 'scolarité/scolarité.html';
+        else window.location.href = 'employe.html';
+    } else {
+        alert('Email, mot de passe ou rôle incorrect !');
+    }
+}
+</script>
+
+</body>
+</html>

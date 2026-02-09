@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - ISTS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #1D1464;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .profil-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            padding: 30px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .profil-photo {
+            flex: 1 1 250px;
+            text-align: center;
+        }
+
+        .profil-photo img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 4px solid #1D1464;
+            object-fit: cover;
+        }
+
+        .profil-info {
+            flex: 2 1 500px;
+            padding: 0 30px;
+        }
+
+        .profil-info h2 {
+            color: #1D1464;
+            margin-top: 0;
+        }
+
+        .profil-info p {
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .description {
+            margin-top: 15px;
+            font-style: italic;
+            color: #555;
+        }
+
+        .edit-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1D1464;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-btn:hover {
+            background-color: #3a2f8f;
+        }
+
+        .section {
+            margin-top: 30px;
+        }
+
+        .section h3 {
+            color: #1D1464;
+            border-bottom: 2px solid #1D1464;
+            padding-bottom: 5px;
+        }
+
+        .skills, .activities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .skills span, .activities span {
+            background-color: #1D1464;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #1D1464;
+            color: white;
+            margin-top: 40px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+        }
+
+        .modal-content h2 {
+            color: #1D1464;
+            margin-top: 0;
+        }
+
+        .modal-content label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .modal-content input[type="file"] {
+            padding: 3px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: #1D1464;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background-color: #3a2f8f;
+        }
+
+        @media screen and (max-width: 768px) {
+            .profil-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .profil-info {
+                padding: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Bienvenue sur mon profil ISTS</h1>
+</header>
+
+<section class="profil-container">
+    <div class="profil-photo">
+        <img src="./assets/styles/images/juju.jpg" alt="Photo Profil" id="profilImage">
+    </div>
+    <div class="profil-info">
+        <h2 id="profilName">Nom Prénom</h2>
+        <p><strong>Email :</strong> <span id="profilEmail">exemple@ists.com</span></p>
+        <p><strong>Téléphone :</strong> <span id="profilTel">+243 000 000 000</span></p>
+        <p><strong>Filière :</strong> <span id="profilFiliere">Informatique</span></p>
+        <p><strong>Niveau :</strong> <span id="profilNiveau">Master1</span></p>
+        <p class="description" id="profilDesc">
+            Étudiant passionné par le développement web et les nouvelles technologies. Toujours prêt à apprendre et à relever de nouveaux défis.
+        </p>
+        <button class="edit-btn" id="editBtn">Modifier Profil</button>
+
+        <div class="section">
+            <h3>Compétences</h3>
+            <div class="skills">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+                <span>Flutter</span>
+                <span>BDD</span>
+                <span>PHP</span>
+            </div>
+            <button class="edit-btn" onclick="window.location.href='index.html'">Retour à l'accueil</button>
+
+        </div>
+
+        <div class="section">
+            <h3>Activités</h3>
+            <div class="activities">
+                <span>Projet Web</span>
+                <span>Bénévolat</span>
+                <span>Club Informatique</span>
+                <span>Marketing</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Modal Form -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <h2>Modifier Profil</h2>
+
+        <label for="imageInput">Photo Profil</label>
+        <input type="file" id="imageInput" accept="image/*">
+
+        <label for="nameInput">Nom Prénom</label>
+        <input type="text" id="nameInput">
+
+        <label for="emailInput">Email</label>
+        <input type="email" id="emailInput">
+
+        <label for="telInput">Téléphone</label>
+        <input type="text" id="telInput">
+
+        <label for="filiereInput">Filière</label>
+        <input type="text" id="filiereInput">
+
+        <label for="niveauInput">Niveau</label>
+        <input type="text" id="niveauInput">
+
+        <label for="descInput">Description</label>
+        <textarea id="descInput" rows="4"></textarea>
+
+        <button id="saveBtn">Enregistrer</button>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 ISTS. Tous droits réservés.
+</footer>
+
+
+</body>
+</html>

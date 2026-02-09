@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajouter Étudiant - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{background:#f4f4f4;display:flex;justify-content:center;align-items:center;height:100vh;}
+.form-container{background:white;padding:30px;border-radius:10px;box-shadow:0 0 15px rgba(0,0,0,0.2);width:400px;}
+h2{text-align:center;margin-bottom:20px;}
+label{font-weight:bold;margin-top:10px;display:block;}
+input, select{width:100%;padding:10px;margin:8px 0;border-radius:5px;border:1px solid #bbb;}
+.btn{padding:10px 15px;border:none;background:#1D1464;color:white;border-radius:5px;cursor:pointer;margin-right:10px;}
+.btn:hover{background:#0f0b3b;}
+.button-group{margin-top:15px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="form-container">
+<h2>Ajouter un Étudiant</h2>
+
+<label>Nom</label>
+<input type="text" id="nom" placeholder="Ex : Mukendi">
+
+<label>Prénom</label>
+<input type="text" id="prenom" placeholder="Ex : Jean">
+
+<label>Sexe</label>
+<select id="sexe">
+    <option value="Masculin">Masculin</option>
+    <option value="Féminin">Féminin</option>
+</select>
+
+<label>Filière</label>
+<select id="filiere">
+    <option value="Informatique">Informatique</option>
+    <option value="Gestion">Gestion</option>
+    <option value="Droit">Droit</option>
+    <option value="Médecine">Médecine</option>
+    <option value="Autre">Autre</option>
+</select>
+
+<label>Niveau (Promotion)</label>
+<select id="niveau">
+    <option value="Licence 1">Licence 1</option>
+    <option value="Licence 2">Licence 2</option>
+    <option value="Licence 3">Licence 3</option>
+    <option value="Master 1">Master 1</option>
+    <option value="Master 2">Master 2</option>
+</select>
+
+<label>Note</label>
+<input type="number" id="note" placeholder="Ex : 75">
+
+<div class="button-group">
+    <button class="btn" onclick="saveStudent()">Enregistrer</button>
+    <button class="btn" style="background:red;" onclick="goBack()">Annuler</button>
+</div>
+</div>
+
+<script>
+function saveStudent(){
+    const nom=document.getElementById('nom').value.trim();
+    const prenom=document.getElementById('prenom').value.trim();
+    const sexe=document.getElementById('sexe').value;
+    const filiere=document.getElementById('filiere').value;
+    const niveau=document.getElementById('niveau').value;
+    const note=document.getElementById('note').value.trim();
+
+    if(!nom||!prenom||!note){ alert('Veuillez remplir tous les champs'); return; }
+
+    let students=JSON.parse(localStorage.getItem('students'))||[];
+    students.push({nom, prenom, sexe, filiere, niveau, note});
+    localStorage.setItem('students', JSON.stringify(students));
+
+    alert('Étudiant ajouté avec succès !');
+    window.location.href='scolarité.html'; // Retour à la page liste
+}
+
+function goBack(){
+    window.location.href='scolarité.html'; // Annuler et revenir
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nouveau produit - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{background:#f4f4f4;display:flex;}
+.sidebar{width:260px;background:#1D1464;height:100vh;color:white;position:fixed;left:0;top:0;padding:20px;}
+.sidebar h2{text-align:center;margin-bottom:30px;}
+.sidebar a{display:block;padding:12px;color:white;border-radius:6px;margin:5px 0;text-decoration:none;}
+.sidebar a:hover{background:#0f0b3b;}
+.topbar{margin-left:260px;width:calc(100% - 260px);background:white;padding:15px 25px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+.content{margin-left:260px;margin-top:80px;padding:20px;}
+h2{margin-bottom:20px;}
+.btn{padding:10px 15px;border:none;background:#1D1464;color:white;border-radius:5px;cursor:pointer;margin-right:10px;}
+.btn:hover{background:#0f0b3b;}
+.form-container{background:white;padding:20px;border-radius:10px;margin-top:20px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+input, select{width:100%;padding:10px;margin:8px 0;border-radius:5px;border:1px solid #bbb;}
+label{font-weight:bold;}
+.message{display:none;padding:10px;margin:10px 0;border-radius:5px;font-weight:bold;}
+.success{background:#d4edda;color:#155724;}
+.error{background:#f8d7da;color:#721c24;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>ISTSH SYSTEM</h2>
+  <a href="../dashboard.html"><i class="fa fa-home"></i> Tableau de bord</a>
+  <a href="stock.html"><i class="fa fa-box"></i> Gestion Stock</a>
+  <a href="../rh/rh.html"><i class="fa fa-users"></i> Ressources Humaines</a>
+  <a href="../facturation/facturation.html"><i class="fa fa-file-invoice"></i> Facturation</a>
+  <a href="../scolarité/scolarité.html"><i class="fa fa-graduation-cap"></i> Scolarité</a>
+  <a href="../frontend/lagout.html"><i class="fa fa-sign-out"></i> Déconnexion</a>
+</div>
+
+<div class="topbar"><h3>Nouveau produit</h3></div>
+
+<div class="content">
+  <h2>Ajouter un produit</h2>
+  <div id="msg" class="message"></div>
+
+  <div class="form-container">
+    <label>Référence</label>
+    <input type="text" id="ref" placeholder="Ex : P001">
+    <label>Nom</label>
+    <input type="text" id="nom" placeholder="Ex : Souris">
+    <label>Catégorie</label>
+    <select id="categorie">
+      <option value="Informatique">Informatique</option>
+      <option value="Bureautique">Bureautique</option>
+      <option value="Autre">Autre</option>
+    </select>
+    <label>Quantité</label>
+    <input type="number" id="quantite" placeholder="Ex : 20">
+    <label>Prix unitaire</label>
+    <input type="number" id="prix" placeholder="Ex : 150">
+    <button class="btn" onclick="saveStock()">Enregistrer</button>
+    <button class="btn" style="background:red;" onclick="clearForm()">Annuler</button>
+  </div>
+</div>
+
+<script>
+let stock = JSON.parse(localStorage.getItem('stock')) || [];
+
+function showMessage(text,type='success'){
+    const msg = document.getElementById('msg');
+    msg.textContent=text;
+    msg.className=`message ${type}`;
+    msg.style.display='block';
+    setTimeout(()=>{msg.style.display='none';},2500);
+}
+
+function clearForm(){
+    document.getElementById('ref').value='';
+    document.getElementById('nom').value='';
+    document.getElementById('categorie').value='Informatique';
+    document.getElementById('quantite').value='';
+    document.getElementById('prix').value='';
+}
+
+function saveStock(){
+    const ref=document.getElementById('ref').value.trim();
+    const nom=document.getElementById('nom').value.trim();
+    const categorie=document.getElementById('categorie').value;
+    const quantite=parseInt(document.getElementById('quantite').value);
+    const prix=parseFloat(document.getElementById('prix').value);
+    if(!ref||!nom||isNaN(quantite)||isNaN(prix)){ showMessage('Veuillez remplir tous les champs correctement','error'); return; }
+    if(stock.some(s=>s.ref===ref)){ showMessage('Référence déjà existante','error'); return; }
+    stock.push({ref,nom,categorie,quantite,prix});
+    localStorage.setItem('stock',JSON.stringify(stock));
+    showMessage('Produit ajouté');
+    clearForm();
+}
+</script>
+
+</body>
+</html>

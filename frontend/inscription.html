@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription – ISTSH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .inscription-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .inscription-container {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+        }
+        .inscription-container img {
+            width: 80px;
+            margin-bottom: 15px;
+        }
+        .inscription-container h2 {
+            margin-bottom: 25px;
+            color: #1d1d1d;
+        }
+        .inscription-container input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .inscription-container input:focus {
+            border-color: #ff9800;
+            box-shadow: 0 0 5px rgba(255,152,0,0.5);
+            outline: none;
+        }
+        .inscription-container button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 1rem;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        .inscription-container button:hover {
+            background-color: #e68900;
+        }
+        .inscription-container .options {
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .inscription-container .options a {
+            color: #1d1d1d;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .inscription-container .options a:hover {
+            color: #ff9800;
+        }
+        footer {
+            background-color: #1d1d1d;
+            color: white;
+            text-align: center;
+            padding: 15px 10px;
+        }
+        .message {
+            position: absolute;
+            top: -30px;
+            width: 100%;
+            color: green;
+            font-weight: bold;
+            display: none;
+            animation: fadeInOut 3s forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        @media(max-width:500px){
+            .inscription-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="inscription-wrapper">
+        <div class="inscription-container">
+            <img src="./assets/styles/images/logo ists.png" alt="Logo ISTSH">
+            <h2>Inscription ISTSH</h2>
+            <div class="message" id="message">Inscription reçue !</div>
+
+            <form id="inscriptionForm">
+                <input type="text" name="nom" placeholder="Nom" required>
+                <input type="text" name="prenom" placeholder="Prénom" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Mot de passe" required>
+                <input type="password" name="confirm_password" placeholder="Confirmer le mot de passe" required>
+                <button type="submit">S'inscrire</button>
+            </form>
+
+            <div class="options">
+                <p>Déjà un compte ? <a href="login.html">Se connecter</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 – ISTSH | Tous droits réservés.
+    </footer>
+
+    <script>
+        const form = document.getElementById('inscriptionForm');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+
+            const nom = form.nom.value;
+            const prenom = form.prenom.value;
+            const email = form.email.value;
+            const password = form.password.value;
+            const confirmPassword = form.confirm_password.value;
+
+            if(password !== confirmPassword){
+                alert("Les mots de passe ne correspondent pas !");
+                return;
+            }
+
+            // Récupérer les utilisateurs existants depuis localStorage
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Vérifier si l'email existe déjà
+            if(users.some(u => u.email === email)){
+                alert("Cet email est déjà utilisé !");
+                return;
+            }
+
+            // Ajouter le nouvel utilisateur
+            users.push({nom, prenom, email, password});
+            localStorage.setItem('users', JSON.stringify(users));
+
+            message.style.display = 'block';
+
+            setTimeout(() => {
+                window.location.href = "login.html"; // Redirection vers login
+            }, 2500);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestion Stock - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{background:#f4f4f4;display:flex;}
+.sidebar{width:260px;background:#1D1464;height:100vh;color:white;position:fixed;left:0;top:0;padding:20px;}
+.sidebar h2{text-align:center;margin-bottom:30px;}
+.sidebar a{display:block;padding:12px;color:white;border-radius:6px;margin:5px 0;text-decoration:none;}
+.sidebar a:hover{background:#0f0b3b;}
+.topbar{margin-left:260px;width:calc(100% - 260px);background:white;padding:15px 25px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+.content{margin-left:260px;margin-top:80px;padding:20px;}
+h2{margin-bottom:20px;}
+.btn{padding:10px 15px;border:none;background:#1D1464;color:white;border-radius:5px;cursor:pointer;margin-right:10px;}
+.btn:hover{background:#0f0b3b;}
+.form-container{background:white;padding:20px;border-radius:10px;margin-top:20px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+input, select{width:100%;padding:10px;margin:8px 0;border-radius:5px;border:1px solid #bbb;}
+label{font-weight:bold;}
+table{width:100%;background:white;border-collapse:collapse;margin-top:25px;border-radius:10px;overflow:hidden;}
+th, td{padding:12px;border-bottom:1px solid #ddd;text-align:left;cursor:pointer;}
+th{background:#1D1464;color:white;}
+tr:hover{background:#f1f1f1;}
+.action-btn{padding:7px 12px;border:none;color:white;border-radius:5px;cursor:pointer;margin-right:5px;}
+.update{background:orange;}
+.delete{background:red;}
+.message{display:none;padding:10px;margin:10px 0;border-radius:5px;font-weight:bold;}
+.success{background:#d4edda;color:#155724;}
+.error{background:#f8d7da;color:#721c24;}
+.search-filter{margin:15px 0; display:flex; gap:10px;}
+.search-filter input, .search-filter select{width:auto;flex:1;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>ISTSH SYSTEM</h2>
+  <a href="../dashboard.html"><i class="fa fa-home"></i> Tableau de bord</a>
+  <a href="ajouter-stock.html"><i class="fa fa-box"></i> Gestion Stock</a>
+  <a href="../rh/rh.html"><i class="fa fa-users"></i> Ressources Humaines</a>
+  <a href="../facturation/facturation.html"><i class="fa fa-file-invoice"></i> Facturation</a>
+  <a href="../scolarité/scolarité.html"><i class="fa fa-graduation-cap"></i> Scolarité</a>
+  <a href="../frontend/lagout.html"><i class="fa fa-sign-out"></i> Déconnexion</a>
+</div>
+
+<div class="topbar"><h3>Gestion Stock</h3></div>
+
+<div class="content">
+  <h2>Liste des produits</h2>
+
+  <div id="msg" class="message"></div>
+
+  <!-- Recherche et filtre -->
+  <div class="search-filter">
+      <input type="text" id="searchInput" placeholder="Rechercher par nom ou référence" onkeyup="applyFilters()">
+      <select id="filterCat" onchange="applyFilters()">
+        <option value="">Toutes catégories</option>
+      </select>
+  </div>
+
+  <!-- Formulaire ajout/modification -->
+  <div class="form-container">
+    <h3>Ajouter / Modifier un produit</h3>
+    <label>Référence</label>
+    <input type="text" id="ref" placeholder="Ex : P001">
+    <label>Nom</label>
+    <input type="text" id="nom" placeholder="Ex : Souris">
+    <label>Catégorie</label>
+    <select id="categorie">
+      <option value="Informatique">Informatique</option>
+      <option value="Bureautique">Bureautique</option>
+      <option value="Autre">Autre</option>
+    </select>
+    <label>Quantité</label>
+    <input type="number" id="quantite" placeholder="Ex : 20">
+    <label>Prix unitaire</label>
+    <input type="number" id="prix" placeholder="Ex : 150">
+    <button class="btn" onclick="saveStock()">Enregistrer</button>
+    <button class="btn" style="background:red;" onclick="clearForm()">Annuler</button>
+  </div>
+
+  <!-- Tableau -->
+  <table id="stockTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Référence</th>
+        <th onclick="sortTable(1)">Nom</th>
+        <th onclick="sortTable(2)">Catégorie</th>
+        <th onclick="sortTable(3)">Quantité</th>
+        <th onclick="sortTable(4)">Prix unitaire</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+let stock = JSON.parse(localStorage.getItem('stock')) || [];
+let editingIndex = null;
+
+function showMessage(text,type='success'){
+    const msg=document.getElementById('msg');
+    msg.textContent=text;
+    msg.className=`message ${type}`;
+    msg.style.display='block';
+    setTimeout(()=>{msg.style.display='none';},2500);
+}
+
+function renderTable(){
+    const tbody=document.getElementById('stockTable').querySelector('tbody');
+    tbody.innerHTML='';
+    const categories = new Set();
+    stock.forEach((item,i)=>{
+        categories.add(item.categorie);
+        const tr=tbody.insertRow();
+        tr.insertCell(0).innerText=item.ref;
+        tr.insertCell(1).innerText=item.nom;
+        tr.insertCell(2).innerText=item.categorie;
+        tr.insertCell(3).innerText=item.quantite;
+        tr.insertCell(4).innerText=item.prix;
+        const actionCell = tr.insertCell(5);
+        actionCell.innerHTML=`<button class="action-btn update" onclick="editStock(${i})">Modifier</button>
+                              <button class="action-btn delete" onclick="deleteStock(${i})">Supprimer</button>`;
+    });
+    populateCategoryFilter([...categories]);
+    applyFilters();
+}
+
+function populateCategoryFilter(cats){
+    const filter=document.getElementById('filterCat');
+    filter.innerHTML=`<option value="">Toutes catégories</option>`;
+    cats.forEach(c=>filter.innerHTML+=`<option value="${c}">${c}</option>`);
+}
+
+function clearForm(){
+    document.getElementById('ref').value='';
+    document.getElementById('nom').value='';
+    document.getElementById('categorie').value='Informatique';
+    document.getElementById('quantite').value='';
+    document.getElementById('prix').value='';
+    editingIndex=null;
+}
+
+function saveStock(){
+    const ref=document.getElementById('ref').value.trim();
+    const nom=document.getElementById('nom').value.trim();
+    const categorie=document.getElementById('categorie').value;
+    const quantite=parseInt(document.getElementById('quantite').value);
+    const prix=parseFloat(document.getElementById('prix').value);
+    if(!ref||!nom||isNaN(quantite)||isNaN(prix)){ showMessage('Veuillez remplir tous les champs correctement','error'); return; }
+    if(editingIndex===null && stock.some(s=>s.ref===ref)){ showMessage('Référence déjà existante','error'); return; }
+    const item={ref,nom,categorie,quantite,prix};
+    if(editingIndex!==null){ stock[editingIndex]=item; showMessage('Produit modifié'); }
+    else{ stock.push(item); showMessage('Produit ajouté'); }
+    localStorage.setItem('stock',JSON.stringify(stock));
+    renderTable();
+    clearForm();
+}
+
+function editStock(index){
+    editingIndex=index;
+    const item=stock[index];
+    document.getElementById('ref').value=item.ref;
+    document.getElementById('nom').value=item.nom;
+    document.getElementById('categorie').value=item.categorie;
+    document.getElementById('quantite').value=item.quantite;
+    document.getElementById('prix').value=item.prix;
+}
+
+function deleteStock(index){
+    if(confirm('Voulez-vous vraiment supprimer ce produit ?')){
+        stock.splice(index,1);
+        localStorage.setItem('stock',JSON.stringify(stock));
+        renderTable();
+        showMessage('Produit supprimé');
+    }
+}
+
+function applyFilters(){
+    const query=document.getElementById('searchInput').value.toLowerCase();
+    const filterCat=document.getElementById('filterCat').value;
+    const tbody=document.getElementById('stockTable').querySelector('tbody');
+    Array.from(tbody.rows).forEach(row=>{
+        const nom=row.cells[1].innerText.toLowerCase();
+        const ref=row.cells[0].innerText.toLowerCase();
+        const cat=row.cells[2].innerText;
+        const matchQuery=nom.includes(query)||ref.includes(query);
+        const matchCat=filterCat===''||cat===filterCat;
+        row.style.display=(matchQuery && matchCat)?'':'none';
+    });
+}
+
+function sortTable(col){
+    const keys=['ref','nom','categorie','quantite','prix'];
+    stock.sort((a,b)=>{
+        if(col===3||col===4) return a[keys[col]]-b[keys[col]];
+        return a[keys[col]].localeCompare(b[keys[col]]);
+    });
+    localStorage.setItem('stock',JSON.stringify(stock));
+    renderTable();
+}
+
+renderTable();
+</script>
+
+</body>
+</html>

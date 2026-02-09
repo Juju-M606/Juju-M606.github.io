@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scolarité - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{background:#f4f4f4;display:flex;}
+/* SIDEBAR */
+.sidebar{width:260px;background:#1D1464;height:100vh;color:white;position:fixed;left:0;top:0;padding:20px;}
+.sidebar h2{text-align:center;margin-bottom:30px;}
+.sidebar a{display:block;padding:12px;color:white;border-radius:6px;margin:5px 0;text-decoration:none;}
+.sidebar a:hover{background:#0f0b3b;}
+/* TOPBAR */
+.topbar{margin-left:260px;width:calc(100% - 260px);background:white;padding:15px 25px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+/* CONTENT */
+.content{margin-left:260px;margin-top:80px;padding:20px;}
+h2{margin-bottom:20px;}
+.btn{padding:10px 15px;border:none;background:#1D1464;color:white;border-radius:5px;cursor:pointer;margin-right:10px;}
+.btn:hover{background:#0f0b3b;}
+.form-container{background:white;padding:20px;border-radius:10px;margin-top:20px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+input, select{width:100%;padding:10px;margin:8px 0;border-radius:5px;border:1px solid #bbb;}
+label{font-weight:bold;}
+table{width:100%;background:white;border-collapse:collapse;margin-top:25px;border-radius:10px;overflow:hidden;}
+th, td{padding:12px;border-bottom:1px solid #ddd;text-align:left;cursor:pointer;}
+th{background:#1D1464;color:white;}
+tr:hover{background:#f1f1f1;}
+.action-btn{padding:7px 12px;border:none;color:white;border-radius:5px;cursor:pointer;}
+.update{background:orange;}
+.delete{background:red;}
+.message{display:none;padding:10px;margin:10px 0;border-radius:5px;font-weight:bold;}
+.success{background:#d4edda;color:#155724;}
+.error{background:#f8d7da;color:#721c24;}
+.search-filter{margin:15px 0; display:flex; gap:10px;}
+.search-filter input, .search-filter select{width:auto;flex:1;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>ISTSH SYSTEM</h2>
+
+  <!-- Tableau de bord -->
+  <a href="../dashboard.html"><i class="fa fa-home"></i> Tableau de bord</a>
+
+  <!-- Gestion Stock -->
+  <a href="../stock/stock.html"><i class="fa fa-box"></i> Gestion Stock</a>
+
+  <!-- Ressources Humaines -->
+  <a href="../rh/rh.html"><i class="fa fa-users"></i> Ressources Humaines</a>
+
+  <!-- Facturation -->
+  <a href="../facturation/facturation.html"><i class="fa fa-file-invoice"></i> Facturation</a>
+
+  <!-- Menu Scolarité -->
+  <a href="scolarité.html"><i class="fa fa-graduation-cap"></i> Scolarité</a>
+  
+  <!-- Déconnexion -->
+  <a href="../frontend/lagout.html"><i class="fa fa-sign-out"></i> Déconnexion</a>
+   <a href="../frontend/lagout.html"><i class="fa fa-sign-out"></i> Déconnexion</a>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+<h3>Gestion Scolarité</h3>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+<h2>Liste des étudiants</h2>
+
+<!-- Message -->
+<div id="msg" class="message"></div>
+
+<!-- Boutons -->
+ 
+<button class="btn" onclick="showForm()"><i class="fa fa-plus"></i> Ajouter Étudiant</button>
+<button class="btn" onclick="printTable()"><i class="fa fa-print"></i> Imprimer</button>
+
+<!-- Recherche et filtre -->
+<div class="search-filter">
+    <input type="text" id="searchInput" placeholder="Rechercher par nom, matricule ou filière" onkeyup="searchStudents()">
+    <select id="filterFiliere" onchange="filterFiliere()">
+        <option value="">Toutes les filières</option>
+    </select>
+    <select id="filterStatut" onchange="filterStatut()">
+        <option value="">Tous statuts</option>
+        <option value="Inscrit">Inscrit</option>
+        <option value="Redoublant">Redoublant</option>
+        <option value="Diplômé">Diplômé</option>
+    </select>
+</div>
+
+<!-- FORMULAIRE AJOUT/MODIFICATION -->
+<div class="form-container" id="formAdd" style="display:none;">
+    <h3>Ajouter / Modifier un étudiant</h3>
+    <label>Matricule</label>
+    <input type="text" id="matricule" placeholder="Ex : ISTS2025-001">
+    <label>Nom</label>
+    <input type="text" id="nom" placeholder="Ex : Mukendi">
+    <label>Prénom</label>
+    <input type="text" id="prenom" placeholder="Ex : Jean">
+    <label>Date de naissance</label>
+    <input type="date" id="dob">
+    <label>Sexe</label>
+    <select id="sexe">
+        <option value="Masculin">Masculin</option>
+        <option value="Féminin">Féminin</option>
+    </select>
+    <label>Filière</label>
+    <select id="filiere">
+        <option value="Informatique">Informatique</option>
+        <option value="Gestion">Gestion</option>
+        <option value="Droit">Droit</option>
+        <option value="Médecine">Médecine</option>
+        <option value="Autre">Autre</option>
+    </select>
+    <label>Niveau (Promotion)</label>
+    <select id="niveau">
+        <option value="Licence 1">Licence 1</option>
+        <option value="Licence 2">Licence 2</option>
+        <option value="Licence 3">Licence 3</option>
+        <option value="Master 1">Master 1</option>
+        <option value="Master 2">Master 2</option>
+    </select>
+    <label>Année académique</label>
+    <input type="text" id="annee" placeholder="Ex : 2025-2026">
+    <label>Statut</label>
+    <select id="statut">
+        <option value="Inscrit">Inscrit</option>
+        <option value="Redoublant">Redoublant</option>
+        <option value="Diplômé">Diplômé</option>
+    </select>
+    <label>Note</label>
+    <input type="number" id="note" placeholder="Ex : 75">
+    <button class="btn" onclick="saveStudent()">Enregistrer</button>
+    <button class="btn" style="background:red;" onclick="hideForm()">Annuler</button>
+</div>
+
+<!-- TABLEAU -->
+<table id="studentTable">
+    <thead>
+        <tr>
+            <th onclick="sortTable(0)">Matricule</th>
+            <th onclick="sortTable(1)">Nom</th>
+            <th onclick="sortTable(2)">Prénom</th>
+            <th onclick="sortTable(3)">Date de naissance</th>
+            <th onclick="sortTable(4)">Sexe</th>
+            <th onclick="sortTable(5)">Filière</th>
+            <th onclick="sortTable(6)">Niveau</th>
+            <th onclick="sortTable(7)">Année</th>
+            <th onclick="sortTable(8)">Statut</th>
+            <th onclick="sortTable(9)">Note</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+</div>
+<script>
+let students = JSON.parse(localStorage.getItem('students')) || [];
+let editingIndex = null;
+
+function showMessage(text,type='success'){
+    const msg = document.getElementById('msg');
+    msg.textContent=text;
+    msg.className = `message ${type}`;
+    msg.style.display='block';
+    setTimeout(()=>{ msg.style.display='none'; },2500);
+}
+
+function renderTable(){
+    const tbody = document.getElementById('studentTable').querySelector('tbody');
+    tbody.innerHTML='';
+    const filieres = new Set();
+    students.forEach((s,i)=>{
+        filieres.add(s.filiere);
+        const tr = tbody.insertRow();
+        tr.insertCell(0).innerText=s.matricule;
+        tr.insertCell(1).innerText=s.nom;
+        tr.insertCell(2).innerText=s.prenom;
+        tr.insertCell(3).innerText=s.dob;
+        tr.insertCell(4).innerText=s.sexe;
+        tr.insertCell(5).innerText=s.filiere;
+        tr.insertCell(6).innerText=s.niveau;
+        tr.insertCell(7).innerText=s.annee;
+        tr.insertCell(8).innerText=s.statut;
+        tr.insertCell(9).innerText=s.note;
+        const actionCell = tr.insertCell(10);
+        actionCell.innerHTML=`<button class="action-btn update" onclick="editStudent(${i})">Modifier</button>
+                              <button class="action-btn delete" onclick="deleteStudent(${i})">Supprimer</button>`;
+    });
+    populateFiliereFilter([...filieres]);
+}
+
+function populateFiliereFilter(filieres){
+    const filter = document.getElementById('filterFiliere');
+    filter.innerHTML=`<option value="">Toutes les filières</option>`;
+    filieres.forEach(f=>{ filter.innerHTML+=`<option value="${f}">${f}</option>`; });
+}
+
+function showForm(){ document.getElementById('formAdd').style.display='block'; clearForm(); }
+function hideForm(){ document.getElementById('formAdd').style.display='none'; editingIndex=null; }
+function clearForm(){
+    document.getElementById('matricule').value='';
+    document.getElementById('nom').value='';
+    document.getElementById('prenom').value='';
+    document.getElementById('dob').value='';
+    document.getElementById('sexe').value='Masculin';
+    document.getElementById('filiere').value='Informatique';
+    document.getElementById('niveau').value='Licence 1';
+    document.getElementById('annee').value='';
+    document.getElementById('statut').value='Inscrit';
+    document.getElementById('note').value='';
+}
+
+function saveStudent(){
+    const matricule=document.getElementById('matricule').value.trim();
+    const nom=document.getElementById('nom').value.trim();
+    const prenom=document.getElementById('prenom').value.trim();
+    const dob=document.getElementById('dob').value;
+    const sexe=document.getElementById('sexe').value;
+    const filiere=document.getElementById('filiere').value;
+    const niveau=document.getElementById('niveau').value;
+    const annee=document.getElementById('annee').value.trim();
+    const statut=document.getElementById('statut').value;
+    const note=document.getElementById('note').value.trim();
+    if(!matricule||!nom||!prenom||!dob||!annee||!note){ showMessage('Veuillez remplir tous les champs','error'); return; }
+    if(editingIndex===null && students.some(s=>s.matricule===matricule)){ showMessage('Matricule déjà existant','error'); return; }
+    const stu={matricule,nom,prenom,dob,sexe,filiere,niveau,annee,statut,note};
+    if(editingIndex!==null){ students[editingIndex]=stu; showMessage('Étudiant mis à jour'); }
+    else{ students.push(stu); showMessage('Étudiant ajouté'); }
+    localStorage.setItem('students',JSON.stringify(students));
+    renderTable(); hideForm();
+}
+
+function editStudent(index){
+    editingIndex=index; const s=students[index];
+    document.getElementById('matricule').value=s.matricule;
+    document.getElementById('nom').value=s.nom;
+    document.getElementById('prenom').value=s.prenom;
+    document.getElementById('dob').value=s.dob;
+    document.getElementById('sexe').value=s.sexe;
+    document.getElementById('filiere').value=s.filiere;
+    document.getElementById('niveau').value=s.niveau;
+    document.getElementById('annee').value=s.annee;
+    document.getElementById('statut').value=s.statut;
+    document.getElementById('note').value=s.note;
+    showForm();
+}
+
+function deleteStudent(index){
+    if(confirm('Voulez-vous vraiment supprimer cet étudiant ?')){
+        students.splice(index,1);
+        localStorage.setItem('students',JSON.stringify(students));
+        renderTable();
+        showMessage('Étudiant supprimé');
+    }
+}
+
+function searchStudents(){
+    const query=document.getElementById('searchInput').value.toLowerCase();
+    const tbody=document.getElementById('studentTable').querySelector('tbody');
+    Array.from(tbody.rows).forEach(row=>{
+        const matricule=row.cells[0].innerText.toLowerCase();
+        const nom=row.cells[1].innerText.toLowerCase();
+        const prenom=row.cells[2].innerText.toLowerCase();
+        const filiere=row.cells[5].innerText.toLowerCase();
+        row.style.display=(matricule.includes(query)||nom.includes(query)||prenom.includes(query)||filiere.includes(query))?'':'none';
+    });
+}
+
+function filterFiliere(){
+    const filiere=document.getElementById('filterFiliere').value;
+    const tbody=document.getElementById('studentTable').querySelector('tbody');
+    Array.from(tbody.rows).forEach(row=>{ row.style.display=(filiere===''||row.cells[5].innerText===filiere)?'':'none'; });
+}
+
+function filterStatut(){
+    const statut=document.getElementById('filterStatut').value;
+    const tbody=document.getElementById('studentTable').querySelector('tbody');
+    Array.from(tbody.rows).forEach(row=>{ row.style.display=(statut===''||row.cells[8].innerText===statut)?'':'none'; });
+}
+
+function sortTable(col){
+    const keys=['matricule','nom','prenom','dob','sexe','filiere','niveau','annee','statut','note'];
+    students.sort((a,b)=>{
+        let valA=a[keys[col]]; let valB=b[keys[col]];
+        if(col===9) return valA-valB;
+        return valA.localeCompare(valB);
+    });
+    localStorage.setItem('students',JSON.stringify(students));
+    renderTable();
+}
+
+function printTable(){
+    const table=document.getElementById('studentTable');
+    const newWin=window.open('','', 'width=800,height=600');
+    newWin.document.write('<html><head><title>Impression Scolarité</title>');
+    newWin.document.write('<style>table{width:100%;border-collapse:collapse;font-family:Arial, Helvetica, sans-serif;}th,td{border:1px solid #000;padding:8px;text-align:left;}th{background:#1D1464;color:white;}</style>');
+    newWin.document.write('</head><body>');
+    newWin.document.write('<h2>Liste des Étudiants - ISTSH SYSTEM</h2>');
+    newWin.document.write(table.outerHTML);
+    newWin.document.write('</body></html>');
+    newWin.document.close(); newWin.focus(); newWin.print(); newWin.close();
+}
+
+// Initialisation
+renderTable();
+</script>
+
+</body>
+</html>

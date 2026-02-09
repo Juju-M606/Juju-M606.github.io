@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - ISTSH SYSTEM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{background:#f4f4f4;display:flex;}
+.sidebar{width:260px;background:#1D1464;height:100vh;color:white;position:fixed;left:0;top:0;padding:20px;}
+.sidebar h2{text-align:center;margin-bottom:30px;}
+.sidebar a{display:block;padding:12px;color:white;border-radius:6px;margin:5px 0;text-decoration:none;}
+.sidebar a:hover{background:#0f0b3b;}
+.topbar{margin-left:260px;width:calc(100% - 260px);background:white;padding:15px 25px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+.content{margin-left:260px;margin-top:80px;padding:20px;}
+h2{margin-bottom:20px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;}
+.card{background:white;padding:20px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;transition:transform 0.2s;}
+.card:hover{transform:translateY(-5px);}
+.card i{font-size:40px;margin-bottom:10px;color:#1D1464;}
+.card h3{font-size:22px;margin-bottom:5px;}
+.card p{font-size:18px;color:#555;}
+.btn{margin-top:10px;padding:8px 12px;background:#1D1464;color:white;border:none;border-radius:5px;text-decoration:none;display:inline-block;}
+.btn:hover{background:#0f0b3b;}
+</style>
+</head>
+<body>
+
+<!-- SCRIPT DE PROTECTION ADMIN -->
+<script>
+// Vérifier si un utilisateur est connecté
+const user = JSON.parse(localStorage.getItem('currentUser'));
+
+// Si pas connecté → login
+if (!user) {
+    alert("Veuillez vous connecter !");
+    window.location.href = "login.html";
+}
+
+// Si pas admin → renvoyer selon son rôle
+if (user.role !== "admin") {
+    alert("Accès réservé à l'administrateur !");
+    
+    if (user.role === "stock") window.location.href = "stock/liste-stock.html";
+    if (user.role === "rh") window.location.href = "rh/liste-employes.html";
+    if (user.role === "facturation") window.location.href = "facturation/factures.html";
+    if (user.role === "scolarite") window.location.href = "scolarite/liste-etudiants.html";
+    if (user.role === "etudiant") window.location.href = "scolarite/liste-etudiants.html";
+}
+</script>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>ISTSH SYSTEM</h2>
+
+    <!-- LIENS CORRIGÉS -->
+    <a href="dashboard.html"><i class="fa fa-home"></i> Tableau de bord</a>
+    <a href="stock/stock.html"><i class="fa fa-box"></i> Gestion Stock</a>
+    <a href="rh/rh.html"><i class="fa fa-users"></i> Ressources Humaines</a>
+    <a href="facturation/factures.html"><i class="fa fa-file-invoice"></i> Facturation</a>
+    <a href="scolarité/scolarité.html"><i class="fa fa-graduation-cap"></i> Scolarité</a>
+    <a href="../frontend/lagout.html"><i class="fa fa-sign-out"></i> Déconnexion</a>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <h3>Tableau de Bord</h3>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+    <h2>Bienvenue sur le Dashboard ISTSH SYSTEM</h2>
+
+    <div class="cards">
+
+        <!-- Stock -->
+        <div class="card">
+            <i class="fa fa-box"></i>
+            <h3 id="stockCount">0</h3>
+            <p>Produits en stock</p>
+            <a href="stock/liste-stock.html" class="btn">Voir Stock</a>
+        </div>
+
+        <!-- RH -->
+        <div class="card">
+            <i class="fa fa-users"></i>
+            <h3 id="rhCount">0</h3>
+            <p>Employés</p>
+            <a href="rh//liste-employes.html" class="btn">Voir RH</a>
+        </div>
+
+        <!-- Factures -->
+        <div class="card">
+            <i class="fa fa-file-invoice"></i>
+            <h3 id="factCount">0</h3>
+            <p>Factures</p>
+            <a href="facturation/facturation.html" class="btn">Voir Factures</a>
+        </div>
+
+        <!-- Étudiants -->
+        <div class="card">
+            <i class="fa fa-graduation-cap"></i>
+            <h3 id="studentCount">0</h3>
+            <p>Étudiants</p>
+            <a href="scolarité/ajouter-etudiant.html" class="btn">Voir Étudiants</a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// Déconnexion
+function logout(){
+    localStorage.removeItem("currentUser");
+    window.location.href = "login.html";
+}
+
+// Statistiques dynamiques
+document.getElementById('stockCount').innerText =
+    (JSON.parse(localStorage.getItem('stock')) || []).length;
+
+document.getElementById('rhCount').innerText =
+    (JSON.parse(localStorage.getItem('employees')) || []).length;
+
+document.getElementById('factCount').innerText =
+    (JSON.parse(localStorage.getItem('factures')) || []).length;
+
+document.getElementById('studentCount').innerText =
+    (JSON.parse(localStorage.getItem('students')) || []).length;
+</script>
+
+</body>
+</html>
